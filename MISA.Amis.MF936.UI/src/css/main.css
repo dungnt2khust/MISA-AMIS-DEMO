@@ -8,7 +8,7 @@
 @import url('./layout/content.css');
 
 /* BASE */
-
+@import url('./base/table.css');
 
 /* APP */
 #app {

@@ -9,6 +9,8 @@
 </template>
 
 <script>
+// LIBRARY
+// COMPONENT
 import TheMenu from './components/Layout/TheMenu.vue';
 import TheHeader from './components/Layout/TheHeader.vue';
 import TheContent from './components/Layout/TheContent.vue';
@@ -19,7 +21,7 @@ export default {
     EmployeeMenu: TheMenu,
     EmployeeHeader: TheHeader,
     EmployeeContent: TheContent
-  },
+  }, 
   data() {
     return {
       toggleMenu: false

@@ -1,0 +1,99 @@
+:root {
+    /* COLOR */
+    --table-header-color: #eceef1;
+    --table-border-color: #C7C7C7;
+    --table-background-hover-color: #f3f8f8;
+    --table-background-color: #fff;
+}
+
+.table-wrapper {
+    height: calc(100% - 84px);
+    overflow: auto;
+    background-color: var(--table-background-color);
+    padding: 0 30px 0 10px;
+}
+    /* TABLE CONTROL */
+    .table__control {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 16px 16px 10px;
+    }
+        /* TABLE SEARCH */
+        .table__search {
+            height: 30px;
+            padding: 6px 23px 6px 11px;
+        }
+        /* TABLE RELOAD */
+        .table__reload {
+            width: 24px;
+            height: 24px;
+            margin: 0 6px;
+            cursor: pointer;
+        }
+        .table__reload::after {
+            display: block;
+            content: "";
+            background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -425px -201px;
+            width: 21px;
+            height: 23px;
+        }
+        .table__reload:hover .table__reload::after {
+            display: block;
+            content: "";
+            background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -1098px -90px;
+            width: 20px;
+            height: 21px;
+        }
+    /* TABLE */
+    .table {
+        width: 100%;
+        table-layout: auto;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+        /* TABLE HEAD */
+        .table__header {
+            position: sticky;
+            top: 0;
+            background-color: var(--table-header-color);
+            font-family: MISANotoSan-Semibold;
+            font-size: 14px;
+            text-transform: capitalize;
+        }
+            .table__header .table__data {
+                padding: 0 10px;
+                white-space: nowrap;
+                height: 34px;
+            }
+        /* TABLE BODY */
+        .table__body {
+
+        }
+        /* TABLE ROW */
+            .table__row {
+
+            }
+            .table__row:hover {
+                background-color: var(--table-background-hover-color);
+            }
+                /* TABLE CHECKBOX */
+                .table__checkbox {
+
+                }
+                /* TABLE DATA */
+                .table__data {
+                    border-right: 1px solid var(--table-border-color);
+                    border-bottom: 1px solid var(--table-border-color);
+                }
+                .table__body .table__data {
+                    height: 47px;
+                    padding: 5px 10px;
+                    font-family: MISANotoSan-Regular;
+                    font-size: 13px;
+                    font-weight: 400;
+                } 
+                /* TABLE FUNCTION */
+                .table__function {
+                    
+                }

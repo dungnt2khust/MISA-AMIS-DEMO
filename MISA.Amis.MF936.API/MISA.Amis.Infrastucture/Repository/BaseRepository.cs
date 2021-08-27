@@ -48,8 +48,8 @@ namespace MISA.Amis.Infrastucture.Repository
         public virtual List<MISAEntity> Get()
         {
             // Lấy dữ liệu
-            var sqlQuery = $"SELECT * FROM {_entityName}";
-            return (List<MISAEntity>)_dbConnection.Query<MISAEntity>(sqlQuery);
+            var storeName = $"Proc_Get{_entityName}s";
+            return (List<MISAEntity>)_dbConnection.Query<MISAEntity>(storeName, commandType: CommandType.StoredProcedure);
         }
 
         /// <summary>

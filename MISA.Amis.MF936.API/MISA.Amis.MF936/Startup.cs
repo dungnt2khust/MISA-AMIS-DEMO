@@ -14,6 +14,7 @@ using MISA.Amis.Infrastucture.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MISA.Amis.MF936
@@ -30,11 +31,15 @@ namespace MISA.Amis.MF936
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MISA.Amis.MF936", Version = "v1" });
+            });
+            // JSON Properties name
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
 
             // DI: Dependency injection
@@ -54,6 +59,7 @@ namespace MISA.Amis.MF936
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(o => o.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
