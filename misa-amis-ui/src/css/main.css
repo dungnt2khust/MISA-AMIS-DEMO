@@ -1,0 +1,25 @@
+/* COMMON */
+@import url('./common/font.css');
+@import url('./common/resetcss.css');
+
+/* LAYOUT */
+@import url('./layout/menu.css');
+@import url('./layout/header.css');
+@import url('./layout/content.css');
+
+/* BASE */
+
+
+/* APP */
+#app {
+    display: flex;
+    min-height: 700px;
+    height: 100vh;
+    font-family: MISANotoSan-Regular;
+}
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100%;
+}

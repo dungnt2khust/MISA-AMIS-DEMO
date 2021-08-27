@@ -1,0 +1,8 @@
+:root {
+    --content-background-color: #b8bcc3;
+}
+
+#content {
+    flex: 1;
+    background-color: var(--content-background-color);
+}

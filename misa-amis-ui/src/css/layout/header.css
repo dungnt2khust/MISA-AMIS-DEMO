@@ -1,0 +1,9 @@
+:root {
+    /* SIZE */
+    --header-height: 48px;
+}
+
+#header {
+    height: var(--header-height);
+    background-color: antiquewhite;
+}
