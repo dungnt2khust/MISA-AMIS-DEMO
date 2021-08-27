@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <employee-menu/>
+    <employee-menu :toggleMenu="toggleMenu"/>
     <div id="wrapper">
-      <employee-header/>
+      <employee-header @toggleOnClick="toggleOnClick"/>
       <employee-content/>
     </div>
   </div>
@@ -19,6 +19,16 @@ export default {
     EmployeeMenu: TheMenu,
     EmployeeHeader: TheHeader,
     EmployeeContent: TheContent
+  },
+  data() {
+    return {
+      toggleMenu: false
+    }
+  },
+  methods: {
+    toggleOnClick() {
+      this.toggleMenu = !this.toggleMenu;
+    }
   }
 }
 </script>

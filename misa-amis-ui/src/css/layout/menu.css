@@ -1,6 +1,7 @@
 :root {
     /* SIZE */
     --menu-width: 180px;
+    --menu-small-width: 52px;
     --menu-home-height: 48px;
     --menu-text-size: 13px;
     --menu-icon-size: 24px;
@@ -19,6 +20,11 @@
     width: var(--menu-width);
     background-color: var(--menu-background-color);
     height: 100%;
+    transition: all 0.1s ease;
+}
+
+#menu.menu--small {
+    width: var(--menu-small-width);
 }
 
 /* MENU HOME */

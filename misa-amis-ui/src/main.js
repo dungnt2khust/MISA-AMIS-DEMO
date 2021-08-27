@@ -7,6 +7,16 @@ Vue.mixin({
   data(){
     return {
       icons: {
+        'toggle-black': {
+          position: '-847px -35px',
+          width: '16px',
+          height: '14px'
+        },
+        'toggle-light': {
+          position: '-316px -37px',
+          width: '16px',
+          height: '14px'
+        },
         'grid-normal': {
           position: '-1157px -32px'
         },

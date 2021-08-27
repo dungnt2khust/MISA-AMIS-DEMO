@@ -1,11 +1,12 @@
 <template lang="">
-	<div id="menu">
+	<div id="menu" :class="{'menu--small': toggleMenu}">
 		<a class="menu__home" href="">
 			<div
 				class="menu__grid"
 				:style="{ 'background-position': icons['grid-light']['position'] }"
 			></div>
 			<img
+				v-if="!toggleMenu"
 				class="menu__logo"
 				src="https://actappg1.misacdn.net/img/Logo_Module_TiengViet_White.66947422.svg"
 				alter="Logo"
@@ -17,12 +18,13 @@
 				href="#"
 				class="menu__item"
 				:key="index"
+				:title="item.name"
 			>
 				<div
 					class="menu__icon"
 					:style="{ 'background-position': item.position }"
 				></div>
-				<span class="menu__label"> {{ item["name"] }} </span>
+				<span class="menu__label" v-if="!toggleMenu"> {{ item["name"] }} </span>
 			</a>
 		</div>
 	</div>
@@ -32,6 +34,12 @@
 		name: "TheMenu",
 		mounted() {
 			console.log(this.icons);
+		},
+		props: {
+			toggleMenu: {
+				type: Boolean,
+				default: false
+			}
 		},
 		data() {
 			return {
