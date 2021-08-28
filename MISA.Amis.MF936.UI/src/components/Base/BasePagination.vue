@@ -7,7 +7,7 @@
 			<pagination-select class="pagination__select" comboboxType="up" />
 			<div class="pagination__redirect">
 				<div
-					class="pagination__prev"
+					class="pagination__prev non-select-text"
 					:class="{ 'pagination--disable': currIdx == 1 }"
 					@click="paginationPrevOnClick()"
 				>
@@ -15,7 +15,7 @@
 				</div>
 				<div
 					v-for="index in numDisplayPage"
-					class="pagination__index"
+					class="pagination__index non-select-text"
 					:class="{ 'pagination__index--selected': index == currIdx }"
 					@click="currIdx = index"
 					:key="index"
@@ -23,7 +23,7 @@
 					{{ index }}
 				</div>
 				<div
-					class="pagination__next"
+					class="pagination__next non-select-text"
 					:class="{ 'pagination--disable': currIdx == totalPage }"
 					@click="paginationNextOnClick()"
 				>

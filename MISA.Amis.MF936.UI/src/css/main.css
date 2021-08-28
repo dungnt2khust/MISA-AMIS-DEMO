@@ -5,6 +5,7 @@
 @import url('./common/resetcss.css');
 @import url('./common/placeholder.css');
 @import url('./common/scrollbar.css');
+@import url('./common/function.css');
 
 /* BASE */
 @import url('./base/table.css');
@@ -30,8 +31,8 @@
 }
 #wrapper {
     display: flex;
+    flex: 1;
     flex-direction: column;
     height: 100%;
-    width: calc(100% - var(--menu-width));
     min-width: 600px;
 }

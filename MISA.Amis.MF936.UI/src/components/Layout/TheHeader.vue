@@ -1,10 +1,12 @@
 <template lang="">
     <div id="header">
         <div class="header__left">
-            <div @click="$emit('toggleOnClick')" class="header__toggle">
+            <div v-if="menuShow" @click="$emit('toggleMenu')" class="header__toggle">
                 <div class="header__toggle-icon"></div>
             </div>
-            <div class="header__dropdown">HEADER DROPDOWN</div>
+            <div class="header__dropdown">
+                <work-modes/>
+            </div>
         </div>
         <div class="header__right">
             <div class="header__notify">
@@ -19,8 +21,20 @@
     </div>
 </template>
 <script>
+// COMPONENTS
+import BaseSelectBox from '../Base/BaseSelectBox.vue'
+
 export default {
-    name: 'TheHeader'
+    name: 'TheHeader',
+    components: {
+        WorkModes: BaseSelectBox
+    },
+    props: {
+        menuShow: {
+            type: Boolean,
+            default: false
+        }
+    }
 }
 </script>
 <style lang="">

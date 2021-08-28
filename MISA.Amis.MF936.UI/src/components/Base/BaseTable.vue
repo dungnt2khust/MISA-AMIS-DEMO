@@ -9,18 +9,16 @@
 					placeholder="Tìm theo mã, tên nhân viên"
 				/>
 			</div>
-			<div class="table__reload have-tooltip">
+			<div v-on="tooltipListeners('Tải lại dữ liệu')" class="table__reload">
 				<div class="table__reload-icon"></div>
-				<span class="tooltip">Tải lại dữ liệu</span>
 			</div>
-			<div class="table__import have-tooltip">
+			<div v-on="tooltipListeners('Thêm mới từ file Excel')" class="table__import">
 				<div class="table__import-icon"></div>
-				<span class="tooltip">Thêm dữ liệu từ Excel</span>	
 			</div>
 		</div>
 		<!-- TABLE -->
 		<table class="table">
-            <!-- TABLE HEAD -->
+			<!-- TABLE HEAD -->
 			<thead class="table__header">
 				<tr class="table__row">
 					<td class="table__data">
@@ -36,7 +34,7 @@
 					<td class="table__data">Chức năng</td>
 				</tr>
 			</thead>
-            <!-- TABLE BODY -->
+			<!-- TABLE BODY -->
 			<tbody class="table__body">
 				<tr v-for="(item, index) in tableData" class="table__row" :key="index">
 					<td class="table__data table__data--checkbox">
@@ -47,35 +45,40 @@
 					</td>
 					<td class="table__data">
 						<div class="table__function">
-                            <div class="table__update">
-                                Sửa
-                            </div> 
-							<div @click="menuPopupOnClick($event, index)" class="menu-popup">
+							<div class="table__update">
+								Sửa
+							</div>
+							<div
+								tabindex="1"
+								@blur="menuPopupOnBlur($event)"
+								@click="menuPopupOnClick($event, index)"
+								class="menu-popup"
+							>
 								<div class="menu-popup__icon"></div>
 							</div>
-                        </div>
+						</div>
 					</td>
 				</tr>
-
 			</tbody>
 			<base-menu-popup
 				:menuPopupState="menuPopupState"
 				:menuPopupTop="menuPopupTop"
 				:menuPopupLeft="menuPopupLeft"
+				:menuPopupType="menuPopupType"
 			/>
 		</table>
-		<base-pagination/>
+		<base-pagination />
 	</div>
 </template>
 <script>
 	// COMPONENTS
-	import BasePagination from './BasePagination.vue'
-	import BaseMenuPopup from './BaseMenuPopup.vue'
+	import BasePagination from "./BasePagination.vue";
+	import BaseMenuPopup from "./BaseMenuPopup.vue";
 	export default {
 		name: "BaseTable",
 		components: {
 			BasePagination,
-			BaseMenuPopup
+			BaseMenuPopup,
 		},
 		props: {
 			tableStyle: {
@@ -96,8 +99,9 @@
 				menuPopupState: false,
 				menuPopupLeft: 0,
 				menuPopupTop: 0,
-				menuPopupIndex: -1
-			}
+				menuPopupIndex: -1,
+				menuPopupType: "",
+			};
 		},
 		methods: {
 			/**
@@ -107,7 +111,19 @@
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			menuPopupOnClick(event, index) {
-				console.log(index);
+				// Thêm focus border khi click vào menu popup
+				if (event.target.classList.contains("menu-popup"))
+					event.target.classList.toggle("menu-popup--selected");
+				else
+					event.target.parentElement.classList.toggle("menu-popup--selected");
+
+				/**
+				 * 1. Nếu đang hiển thị thì kiểm tra có trùng với nút menu cũ không
+				 * 1.1. Nếu không trùng thì hiển thị ở một vị trí mới
+				 * 1.2. Nếu trùng với nút menu cũ thì ẩn menu popup đi
+				 * 2. Chưa hiển thì thì chỉ việc hiển thị menu popup lên
+				 */
+
 				if (this.menuPopupState) {
 					if (this.menuPopupIndex != index) {
 						this.showMenuPopup(event.clientX, event.clientY, index);
@@ -117,7 +133,15 @@
 				} else {
 					this.showMenuPopup(event.clientX, event.clientY, index);
 				}
-					
+			},
+			/**
+			 * Xử lý sự kiện blur khỏi nút menu popup
+			 * @param {event} event
+			 * CreatedBy: NTDUNG (28/08/2021)
+			 */
+			menuPopupOnBlur(event) {
+				this.menuPopupState = false;
+				event.target.classList.remove('menu-popup--selected');
 			},
 			/**
 			 * Hiển thị menu popup
@@ -127,6 +151,17 @@
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			showMenuPopup(clientX, clientY, index) {
+				// Kiểm tra vị trí chuột để show loại menu popup đúng (DOWN/ UP)
+				if (
+					clientY + this.paginationHeight + this.menuPopupTable <=
+					window.innerHeight
+				) {
+					this.menuPopupType = "down";
+				} else {
+					this.menuPopupType = "up";
+				}
+
+				// Hiển thị menu popup
 				this.menuPopupIndex = index;
 				this.menuPopupState = true;
 				this.menuPopupLeft = clientX;
@@ -138,8 +173,8 @@
 			 */
 			hideMenuPopup() {
 				this.menuPopupState = false;
-			}
-		}
+			},
+		},
 	};
 </script>
 <style lang=""></style>

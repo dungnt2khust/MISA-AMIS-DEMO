@@ -4,9 +4,8 @@
             <div class="content__name">
                 Nhân viên
             </div>
-            <div class="content__add have-tooltip" >
+            <div v-on="tooltipListeners('Thêm nhân viên mới') " class="content__add" >
                 Thêm mới nhân viên
-                <span class="tooltip">Nhấn vào để thêm mới</span>
             </div> 
         </div>
         <base-table
@@ -17,7 +16,7 @@
 </template>
 <script>
 // LIBRARY
-import axios from 'axios';
+import axios from 'axios'
 
 // COMPONENT
 import BaseTable from '../Base/BaseTable.vue'
@@ -55,6 +54,17 @@ export default {
             .catch(res => {
                 console.log(res);
             })
+    },
+    methods: {
+        func() {
+            this.func2();
+        },
+        func2() {
+            this.func3();
+        },
+        func3() {
+            console.log('end')
+        }
     }
 }
 </script>

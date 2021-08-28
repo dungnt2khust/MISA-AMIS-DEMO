@@ -1,11 +1,5 @@
-.have-tooltip {
-    position: relative;
-}
-/* .have-tooltip:hover .tooltip{
-    display: block;
-} */
 .tooltip {
-    display: none;
+    display: block;
     position: fixed;
     background-color: #393a3d;
     font-size: 11px;
@@ -16,4 +10,6 @@
     white-space: nowrap;
     color: #FFF;
     z-index: 9999;
+    top: 50%;
+    left: 50%;
 }

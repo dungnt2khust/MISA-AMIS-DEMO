@@ -1,10 +1,15 @@
 <template>
   <div id="app">
-    <employee-menu :toggleMenu="toggleMenu"/>
+    <employee-menu 
+      :menuShow="menuShow"
+      @toggleMenu="toggleMenu"/>
     <div id="wrapper">
-      <employee-header @toggleOnClick="toggleOnClick"/>
+      <employee-header 
+      :menuShow="menuShow"
+      @toggleMenu="toggleMenu"/>
       <employee-content/>
     </div>
+    <base-tooltip/>
   </div>
 </template>
 
@@ -14,17 +19,19 @@
 import TheMenu from './components/Layout/TheMenu.vue';
 import TheHeader from './components/Layout/TheHeader.vue';
 import TheContent from './components/Layout/TheContent.vue';
+import BaseTooltip from './components/Base/BaseTooltip.vue';
 
 export default {
   name: 'App',
   components: {
     EmployeeMenu: TheMenu,
     EmployeeHeader: TheHeader,
-    EmployeeContent: TheContent
+    EmployeeContent: TheContent,
+    BaseTooltip
   }, 
   data() {
     return {
-      toggleMenu: false
+      menuShow: true
     }
   },
   mounted() {
@@ -34,9 +41,10 @@ export default {
     /**
      * Toggle menu 
      * CreatedBy: NTDUNG (28/08/2021)
+     * ModifiedBy: NTDUNG (28/08/2021)
      */
-    toggleOnClick() {
-      this.toggleMenu = !this.toggleMenu;
+    toggleMenu() {
+      this.menuShow = !this.menuShow;
     },
     /**
      * Đặt sự kiện cho những phần có tooltip trong app

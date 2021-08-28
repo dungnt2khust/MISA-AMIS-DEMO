@@ -49,6 +49,22 @@
             width: 16px;
             height: 16px;
         }
+    /* MENU TOGGLE */
+    .menu__toggle {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 16px;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+        .menu__toggle-icon {
+            background-image: url('../../assets/img/Sprites.64af8f61.svg');
+            background-position: -316px -37px;
+            width: 16px;
+            height: 14px;
+        }
     /* MENU LOGO */
     .menu__logo {
         height: var(--menu-logo-height);
@@ -60,6 +76,9 @@
     height: calc(100% - var(--menu-home-height));
     padding-top: 14px;
     overflow: auto;
+}
+.menu__list::-webkit-scrollbar {
+    width: 6px;
 }
     /* MENU ITEM */
     .menu__item {

@@ -60,6 +60,7 @@
         left: -1px;
         background-color: #FFF;
         border: 1px solid var(--border-color);
+        border-radius: 3px;
     }
     .combobox--show .combobox__list {
         display: block;

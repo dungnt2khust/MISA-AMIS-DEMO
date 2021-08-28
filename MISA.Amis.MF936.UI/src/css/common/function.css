@@ -1,0 +1,4 @@
+
+.non-select-text {
+    user-select: none !important;
+}

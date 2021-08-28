@@ -1,13 +1,17 @@
 <template lang="">
 	<div
 		class="menu-popup-container"
-		:class="{ 'selectbox--show': menuPopupState }"
-		:style="{ top: menuPopupTop + 8 +  'px', left: menuPopupLeft + 8 + 'px'}"
+		:class="{ 'selectbox--show': menuPopupState, 'selectbox--up': menuPopupType == 'up' }"
+		:style="setPositionOfMenuPopup"
 	>
 		<ul class="selectbox__list">
-			<li class="selectbox__item">Nhân bản</li>
-			<li class="selectbox__item">Xoá</li>
-			<li class="selectbox__item">Ngừng sử dụng</li>
+			<li
+				v-for="(item, index) in menuPopupData"
+				class="selectbox__item"
+				:key="index"
+			>
+				{{ item }}
+			</li>
 		</ul>
 	</div>
 </template>
@@ -27,21 +31,32 @@
 				type: Number,
 				default: 0,
 			},
+			menuPopupType: {
+				type: String,
+				default: ''
+			}
+		},
+		data() {
+			return {
+				menuPopupData: ["Nhân bản", "Xoá", "Ngừng sử dụng"],
+			};
+		},
+		computed: {
+			/**
+			 * Tính toàn vị trí của menu popup 
+			 * CreatedBy: NTDUNG (28/08/2021)
+			 */
+			setPositionOfMenuPopup() {
+				// Thêm khoảng cách của position để cách menu popup một khoảng vừa đủ
+				var distance = this.menuPopupType == 'up' ? -8 : 8;
+				return { top: this.menuPopupTop + distance + 'px', left: this.menuPopupLeft + 8 + 'px' };
+			}
 		},
 		watch: {
-			menuPopupLeft: function(newValue){
-				console.log('change position: ', newValue);
-			},
-			menuPopupTop: function(newValue){
-				console.log('change position: ', newValue);
-			},
-			menuPopupState: function(newValue) {
-				if (newValue)
-					console.log('show')
-				else 
-					console.log('hide')
-			}
-		}
+			menuPopupType: function(value) {
+				console.log(value);
+			}	
+		},
 	};
 </script>
 <style lang=""></style>
