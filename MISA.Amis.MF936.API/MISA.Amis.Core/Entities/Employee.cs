@@ -109,9 +109,21 @@ namespace MISA.Amis.Core.Entities
         public Guid? DepartmentId { get; set; }
 
         /// <summary>
+        /// Tên phòng ban
+        /// </summary>
+        [MISANotMap]
+        public string DepartmentName { get; set; }
+
+        /// <summary>
         /// id vị trí
         /// </summary>
         public Guid? PossitionId { get; set; }
+
+        /// <summary>
+        /// Tên vị trí / chức vụ
+        /// </summary>
+        [MISANotMap]
+        public string PossitionName { get; set; }
         #endregion
     }
 }

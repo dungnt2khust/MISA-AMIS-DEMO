@@ -1,71 +1,127 @@
 :root {
+    /* SIZE */
+    --table-padding-left: 10px;
+    --table-padding-right: 30px;
     /* COLOR */
     --table-header-color: #eceef1;
-    --table-border-color: #C7C7C7;
     --table-background-hover-color: #f3f8f8;
     --table-background-color: #fff;
 }
 
 .table-wrapper {
-    height: calc(100% - 84px);
+    flex: 1;
     overflow: auto;
     background-color: var(--table-background-color);
-    padding: 0 30px 0 10px;
+    padding: 0 30px 0px 10px;
+    margin-right: 30px;
+    position: relative;
 }
     /* TABLE CONTROL */
-    .table__control {
+    .table__control { 
+        position: sticky;
+        left: 0;
         display: flex;
-        justify-content: flex-end;
         align-items: center;
-        padding: 16px 16px 10px;
+        justify-content: flex-end;
+        padding: 16px 0px 26px;
     }
         /* TABLE SEARCH */
         .table__search {
             height: 30px;
-            padding: 6px 23px 6px 11px;
+            width: 240px;
+            position: relative;
         }
+            .table__search-input {
+                width: 100%;
+                height: 100%;
+                padding: 6px 23px 6px 11px;
+                outline: none;
+                border: 1px solid var(--border-color);
+                border-radius: 2px;
+            }
+            .table__search-input:focus {
+                border: 1px solid var(--input-focus-color);
+            }
+            .table__search::after {
+                display: block;
+                content: "";
+                background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -425px -33px;
+                width: 22px;
+                height: 22px;
+                transform: scale(0.7);
+                position: absolute;
+                top: 4px;
+                right: 6px;
+            }
+
         /* TABLE RELOAD */
         .table__reload {
             width: 24px;
             height: 24px;
-            margin: 0 6px;
+            margin-left: 6px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
             cursor: pointer;
         }
-        .table__reload::after {
-            display: block;
-            content: "";
-            background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -425px -201px;
-            width: 21px;
-            height: 23px;
+            .table__reload-icon {
+                display: block;
+                content: "";
+                background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -425px -201px;
+                width: 21px;
+                height: 23px;
+            }
+            .table__reload:hover .table__reload-icon {
+                display: block;
+                content: "";
+                background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -1098px -90px;
+                width: 20px;
+                height: 21px;
+            }
+        /* TABLE IMPORT */
+        .table__import {
+            width: 24px;
+            height: 24px;
+            margin-left: 6px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            cursor: pointer;
         }
-        .table__reload:hover .table__reload::after {
-            display: block;
-            content: "";
-            background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -1098px -90px;
-            width: 20px;
-            height: 21px;
-        }
+            .table__import-icon {
+                background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -705px -202px;
+                width: 23px;
+                height: 20px;
+            }
+            .table__import:hover .table__import-icon {
+                background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -705px -258px;
+            }
     /* TABLE */
     .table {
         width: 100%;
         table-layout: auto;
         border-collapse: separate;
         border-spacing: 0;
-    }
+        overflow-x: auto;
+    }  
         /* TABLE HEAD */
         .table__header {
             position: sticky;
+            z-index: 100;
             top: 0;
-            background-color: var(--table-header-color);
             font-family: MISANotoSan-Semibold;
             font-size: 14px;
             text-transform: capitalize;
         }
+            /* THEAD TABLE DATA */
             .table__header .table__data {
                 padding: 0 10px;
                 white-space: nowrap;
                 height: 34px;
-            }
+                background-color: var(--table-header-color);
+                border-right: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+            } 
         /* TABLE BODY */
         .table__body {
 
@@ -73,27 +129,98 @@
         /* TABLE ROW */
             .table__row {
 
-            }
-            .table__row:hover {
-                background-color: var(--table-background-hover-color);
+            } 
+            .table__row:hover .table__data{
+                background-color: var(--table-background-hover-color) !important;
             }
                 /* TABLE CHECKBOX */
                 .table__checkbox {
 
-                }
-                /* TABLE DATA */
-                .table__data {
-                    border-right: 1px solid var(--table-border-color);
-                    border-bottom: 1px solid var(--table-border-color);
-                }
+                }  
+                /* TBODY TABLE DATA */
                 .table__body .table__data {
                     height: 47px;
                     padding: 5px 10px;
                     font-family: MISANotoSan-Regular;
                     font-size: 13px;
                     font-weight: 400;
-                } 
+                    background-color: #FFF;
+                    white-space: nowrap;
+                    border-right: 1px dotted var(--border-color);
+                    border-bottom: 1px dotted var(--border-color);
+                }  
                 /* TABLE FUNCTION */
                 .table__function {
-                    
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
                 }
+                    /* TABLE UPDATE */
+                    .table__update {
+                        color: #0075c0;
+                        font-family: MISANotoSan-Semibold;
+                        font-size: 13px;
+                        font-weight: 600;
+                    }
+
+/* DÁN CÁC CỘT CỦA TABLE LẠI CỦA TABLE LẠI */
+
+/* CỘT ĐẦU TIÊN */
+.table__header .table__data:first-child, 
+.table__body .table__data:first-child {
+    position: sticky;
+    left: 0;
+    width: 34px;
+}
+
+/* CỘT THỨ 2 */
+.table__header .table__data:nth-child(2),
+.table__body .table__data:nth-child(2) {
+    position: sticky;
+    left: 34px;
+    min-width: 146px;
+}
+
+/* CỘT THỨ 3 */
+.table__header .table__data:nth-child(3),
+.table__body .table__data:nth-child(3) {
+    position: sticky;
+    left: 180px;
+    min-width: 250px;
+}
+
+/* CỘT CUỐI */
+.table__header .table__data:last-child,
+.table__body .table__data:last-child {
+    border-right: none;
+    position: sticky;
+    z-index: 1;
+    right: 0;
+    border-left: 1px dotted var(--border-color);
+    min-width: 120px;
+    text-align: center;
+}
+
+/* ĐÈ LÊN PHẦN THỪA CỦA TABLE ĐỂ CHE ĐI KHI SCROLL*/
+.table__row .table__data:first-child::before {
+    display: block;
+    content: "";
+    width: 10px; 
+    height: calc(100% + 1px);
+    background-color: var(--table-background-color);
+    position: absolute;
+    top: 0;
+    left: -10px;
+    z-index: 3;
+}
+.table__row .table__data:last-child:after {
+    display: block;
+    content: "";
+    width: 30px; 
+    height: calc(100% + 1px);
+    background-color: var(--table-background-color);
+    position: absolute;
+    top: 0;
+    right: -30px;
+}

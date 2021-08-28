@@ -4,9 +4,10 @@
             <div class="content__name">
                 Nhân viên
             </div>
-            <div class="content__add">
+            <div class="content__add have-tooltip" >
                 Thêm mới nhân viên
-            </div>
+                <span class="tooltip">Nhấn vào để thêm mới</span>
+            </div> 
         </div>
         <base-table
             :tableStyle="tableStyle"

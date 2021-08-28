@@ -1,0 +1,19 @@
+.have-tooltip {
+    position: relative;
+}
+/* .have-tooltip:hover .tooltip{
+    display: block;
+} */
+.tooltip {
+    display: none;
+    position: fixed;
+    background-color: #393a3d;
+    font-size: 11px;
+    font-family: MISANotoSan-Regular;
+    padding: 6px 8px;
+    line-height: 11px;
+    border-radius: 4px;
+    white-space: nowrap;
+    color: #FFF;
+    z-index: 9999;
+}

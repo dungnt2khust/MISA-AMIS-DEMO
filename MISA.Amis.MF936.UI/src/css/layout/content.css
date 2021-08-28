@@ -4,9 +4,13 @@
     /* COLOR */
     --content-background-color: #f8f8f8;
     --content-add-color: #2ca01c;
+    --content-add-hover-color: #35bf22;
+    --content-add-active-color: #248b15;
 }
 
 #content {
+    display: flex;
+    flex-direction: column;
     height: calc(100% - var(--header-height));
     background-color: var(--content-background-color);
     padding-left: 20px;
@@ -14,6 +18,7 @@
 
 /* CONTENT HEADER */
 .content__header {
+    flex-shrink: 0;
     display: flex;
     justify-content: space-between;
     padding: 24px 30px 24px 0;
@@ -36,4 +41,11 @@
         padding: 0 16px;
         line-height: var(--content-header-height);
         border-radius: 6px;
+        cursor: pointer;
+    }
+    .content__add:hover {
+        background-color: var(--content-add-hover-color);
+    }
+    .content__add:active {
+        background-color: var(--content-add-active-color);
     }

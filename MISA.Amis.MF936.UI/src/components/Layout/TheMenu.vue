@@ -1,10 +1,7 @@
 <template lang="">
 	<div id="menu" :class="{ 'menu--small': toggleMenu }">
 		<a class="menu__home" href="">
-			<div
-				class="menu__grid"
-				:style="{ 'background-position': icons['grid-light']['position'] }"
-			></div>
+			<div class="menu__grid"></div>
 			<img
 				v-if="!toggleMenu"
 				class="menu__logo"

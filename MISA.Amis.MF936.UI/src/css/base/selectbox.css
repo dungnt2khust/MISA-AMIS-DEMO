@@ -1,0 +1,33 @@
+.selectbox {
+    position: relative;
+} 
+    /* SELECBOX LIST */
+    .selectbox__list {
+        display: none;
+        list-style: none;
+        position: absolute;
+        z-index: 1000;
+        top: calc(100% + 4px);
+        right: 0;
+        background-color: #FFF;
+        border: 1px solid var(--border-color);
+    }
+    .selectbox--up .selectbox__list {
+        bottom: calc(100% + 4px);
+        top: unset;
+    }
+    .selectbox--show .selectbox__list {
+        display: block;
+    }
+        /* SELECTBOX ITEM */
+        .selectbox__item {
+            padding: 5px 10px;
+            white-space: nowrap;
+            font-family: MISANotoSan-Regular;
+            font-weight: 550;
+            text-align: left;
+        }
+        .selectbox__item:hover {
+            background: #E8E9EC;
+            color: #08BF1E;
+        }

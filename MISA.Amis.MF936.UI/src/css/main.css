@@ -1,25 +1,37 @@
 /* COMMON */
+@import url('./common/color.css');
 @import url('./common/font.css');
+@import url('./common/textstyle.css');
 @import url('./common/resetcss.css');
+@import url('./common/placeholder.css');
+@import url('./common/scrollbar.css');
+
+/* BASE */
+@import url('./base/table.css');
+@import url('./base/combobox.css');
+@import url('./base/selectbox.css');
+@import url('./base/menupopup.css');
+@import url('./base/pagination.css');
+@import url('./base/tooltip.css');
 
 /* LAYOUT */
 @import url('./layout/menu.css');
 @import url('./layout/header.css');
 @import url('./layout/content.css');
 
-/* BASE */
-@import url('./base/table.css');
+
 
 /* APP */
 #app {
     display: flex;
-    min-height: 700px;
+    /* min-height: 700px; */
     height: 100vh;
     font-family: MISANotoSan-Regular;
 }
 #wrapper {
     display: flex;
     flex-direction: column;
-    flex: 1;
     height: 100%;
+    width: calc(100% - var(--menu-width));
+    min-width: 600px;
 }
