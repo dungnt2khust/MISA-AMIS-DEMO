@@ -3,9 +3,6 @@
     --content-header-height: 36px;
     /* COLOR */
     --content-background-color: #f8f8f8;
-    --content-add-color: #2ca01c;
-    --content-add-hover-color: #35bf22;
-    --content-add-active-color: #248b15;
 }
 
 #content {
@@ -30,22 +27,4 @@
         font-family: MISANotoSan-Semibold;
         font-weight: 700;
         line-height: var(--content-header-height);
-    }
-    /* CONTENT ADD */
-    .content__add {
-        background-color: var(--content-add-color);
-        color: #FFF;
-        font-family: MISANotoSan-Semibold;
-        font-size: 13px;
-        text-align: center;
-        padding: 0 16px;
-        line-height: var(--content-header-height);
-        border-radius: 6px;
-        cursor: pointer;
-    }
-    .content__add:hover {
-        background-color: var(--content-add-hover-color);
-    }
-    .content__add:active {
-        background-color: var(--content-add-active-color);
-    }
+    } 

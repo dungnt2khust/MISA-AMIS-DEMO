@@ -22,7 +22,7 @@
 			<thead class="table__header">
 				<tr class="table__row">
 					<td class="table__data">
-						<input type="checkbox" name="" id="" class="table__checkbox" />
+						<base-checkbox/>
 					</td>
 					<td
 						v-for="(item, index) in tableStyle"
@@ -38,7 +38,7 @@
 			<tbody class="table__body">
 				<tr v-for="(item, index) in tableData" class="table__row" :key="index">
 					<td class="table__data table__data--checkbox">
-						<input type="checkbox" name="" id="" class="table__checkbox" />
+						<base-checkbox/>
 					</td>
 					<td v-for="(itm, idx) in tableStyle" class="table__data" :key="idx">
 						{{ item[itm["field"]] }}
@@ -71,14 +71,21 @@
 	</div>
 </template>
 <script>
+	// LIBRARY
+	import Mixin from '../../Mixins/Mixin.js'
+
 	// COMPONENTS
-	import BasePagination from "./BasePagination.vue";
-	import BaseMenuPopup from "./BaseMenuPopup.vue";
+	import BasePagination from "./BasePagination.vue"
+	import BaseMenuPopup from "./BaseMenuPopup.vue"
+	import BaseCheckbox from './BaseCheckbox.vue'
+
 	export default {
 		name: "BaseTable",
+		mixins: [Mixin],
 		components: {
 			BasePagination,
 			BaseMenuPopup,
+			BaseCheckbox
 		},
 		props: {
 			tableStyle: {

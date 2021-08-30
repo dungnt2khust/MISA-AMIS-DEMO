@@ -36,6 +36,7 @@
 <script>
 	// COMPONENTS
 	import BaseCombobox from "./BaseCombobox.vue";
+	
 	export default {
 		name: "BasePagination",
 		components: {

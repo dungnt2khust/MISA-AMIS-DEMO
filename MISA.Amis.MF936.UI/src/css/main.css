@@ -14,6 +14,11 @@
 @import url('./base/menupopup.css');
 @import url('./base/pagination.css');
 @import url('./base/tooltip.css');
+@import url('./base/form.css');
+@import url('./base/button.css');
+@import url('./base/input.css');
+@import url('./base/checkbox.css');
+@import url('./base/radio.css');
 
 /* LAYOUT */
 @import url('./layout/menu.css');

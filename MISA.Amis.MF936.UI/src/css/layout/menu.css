@@ -20,6 +20,9 @@
     width: var(--menu-width);
     background-color: var(--menu-background-color);
     height: 100%;
+    /* transition: all 1s ease; */
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 #menu.menu--small {
@@ -97,7 +100,6 @@
         .menu__icon-wrapper {
             width: var(--menu-icon-size);
             height: var(--menu-icon-size); 
-            margin-right: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -107,4 +109,5 @@
             }
         /* MENU LABEL */
         .menu__label {
+            margin-left: 8px;
         }

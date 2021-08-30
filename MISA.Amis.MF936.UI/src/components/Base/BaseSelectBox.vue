@@ -6,7 +6,11 @@
 			'selectbox--show': selectboxState,
 		}"
 	>
-		<div @click="selectboxState = !selectboxState" class="selectbox__value">
+		<div
+			v-on="tooltipListeners(selectboxData[currIdx])"
+			@click="selectboxState = !selectboxState"
+			class="selectbox__value"
+		>
 			{{ selectboxData[currIdx] }}
 		</div>
 		<div
@@ -27,8 +31,12 @@
 	</div>
 </template>
 <script>
+	// LIBRARY
+	import Mixin from "../../Mixins/Mixin.js";
+
 	export default {
 		name: "BaseSelectBox",
+		mixins: [Mixin],
 		props: {
 			selectboxType: {
 				type: String,
