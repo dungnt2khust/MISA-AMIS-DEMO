@@ -1,7 +1,7 @@
 <template lang="">
     <div class="input-wrapper">
         <span class="label"> {{ label }} <span v-if="required" class="text-red">*</span></span> 
-        <input type="text" class="input">
+        <input :title="isError ? label + error : ''" type="text" class="input">
     </div>
 </template>
 <script>
@@ -19,6 +19,8 @@ export default {
     },
     data() {
         return {
+            isError: true,
+            error: ' không được để trống'
         }
     }
 }

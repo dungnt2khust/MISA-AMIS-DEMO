@@ -1,10 +1,10 @@
 <template lang="">
 	<div
 		class="menu-popup-container"
-		:class="{ 'selectbox--show': menuPopupState, 'selectbox--up': menuPopupType == 'up' }"
+		:class="{ 'selectbox--show': menuPopupState, 'selectbox--up': isUp }"
 		:style="setPositionOfMenuPopup"
 	>
-		<ul class="selectbox__list">
+		<ul ref="menuPopup" class="selectbox__list">
 			<li
 				v-for="(item, index) in menuPopupData"
 				class="selectbox__item"
@@ -16,25 +16,23 @@
 	</div>
 </template>
 <script>
+	// LIBRARY
+	import Mixin from "../../Mixins/Mixin.js"
+
 	export default {
 		name: "BaseMenuPopup",
+		mixins: [Mixin],
 		props: {
 			menuPopupState: {
 				type: Boolean,
 				default: false,
 			},
-			menuPopupTop: {
-				type: Number,
-				default: 0,
+			menuPopupPosition: {
+				type: Object,
+				default: function() {
+					return {};
+				},
 			},
-			menuPopupLeft: {
-				type: Number,
-				default: 0,
-			},
-			menuPopupType: {
-				type: String,
-				default: ''
-			}
 		},
 		data() {
 			return {
@@ -43,20 +41,31 @@
 		},
 		computed: {
 			/**
-			 * Tính toàn vị trí của menu popup 
+			 * Tính toàn vị trí của menu popup
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			setPositionOfMenuPopup() {
-				// Thêm khoảng cách của position để cách menu popup một khoảng vừa đủ
-				var distance = this.menuPopupType == 'up' ? -8 : 8;
-				return { top: this.menuPopupTop + distance + 'px', left: this.menuPopupLeft + 8 + 'px' };
-			}
-		},
-		watch: {
-			menuPopupType: function(value) {
-				console.log(value);
-			}	
-		},
+				// Tính toán vị trí của menu popup
+				var top = this.isUp
+					? this.menuPopupPosition["top"] + "px"
+					: this.menuPopupPosition["bottom"] + "px";
+				return { top: top, left: this.menuPopupPosition["right"] + "px" };
+			},
+			/**
+			 * Kiểm tra là up hay down
+			 * CreatedBy: NTDUNG (30/08/2021)
+			 */
+			isUp() {
+				// Vị trí bottom của nút bấm
+				var btnBottom = this.menuPopupPosition["bottom"];
+				// Chiều cao của menu popup
+				var menuPopupHeight = 90; 
+				// Chiều cao khả dụng của cửa sổ trình duyệt
+				var windowHeight = window.innerHeight;
+				
+				return btnBottom + menuPopupHeight + this.paginationHeight >= windowHeight;
+			},
+		}
 	};
 </script>
 <style lang=""></style>

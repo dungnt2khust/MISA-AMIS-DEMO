@@ -18,6 +18,7 @@
     /* RADIO ITEM */
     .radio__item {
         margin-right: 20px !important;
+        outline: none;
     }
         /* RADIO BORDER */
         .radio__border {

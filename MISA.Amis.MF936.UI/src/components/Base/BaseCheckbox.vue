@@ -1,7 +1,7 @@
 <template lang="">
-    <div class="checkbox" :class="{'checkbox--selected': checkboxState}">
+    <div tabindex="0" class="checkbox" @click="checkboxState = !checkboxState" :class="{'checkbox--selected': checkboxState}">
         <div class="checkbox__border">
-            <div @click="checkboxState = !checkboxState" class="checkbox__main">
+            <div class="checkbox__main">
                 <div class="checkbox__icon"></div>
             </div> 
         </div> 

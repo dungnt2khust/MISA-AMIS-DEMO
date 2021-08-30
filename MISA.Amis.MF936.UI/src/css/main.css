@@ -19,6 +19,8 @@
 @import url('./base/input.css');
 @import url('./base/checkbox.css');
 @import url('./base/radio.css');
+@import url('./base/inputdate.css');
+@import url('./base/datepicker.css');
 
 /* LAYOUT */
 @import url('./layout/menu.css');

@@ -2,7 +2,6 @@ export default {
   data() {
     return {
       paginationHeight: 46,
-      menuPopupTable: 98
     }
   },
   methods: {

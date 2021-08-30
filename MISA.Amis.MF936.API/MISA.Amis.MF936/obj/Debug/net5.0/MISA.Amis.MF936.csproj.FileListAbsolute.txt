@@ -64,3 +64,4 @@ C:\Workspace\INTERN\MISA-AMIS-DEMO\MISA.Amis.MF936.API\MISA.Amis.MF936\obj\Debug
 C:\Workspace\INTERN\MISA-AMIS-DEMO\MISA.Amis.MF936.API\MISA.Amis.MF936\obj\Debug\net5.0\MISA.Amis.MF936.RazorTargetAssemblyInfo.cache
 C:\Workspace\INTERN\MISA-AMIS-DEMO\MISA.Amis.MF936.API\MISA.Amis.MF936\obj\Debug\net5.0\MISA.Amis.MF936.csproj.CopyComplete
 C:\Workspace\INTERN\MISA-AMIS-DEMO\MISA.Amis.MF936.API\MISA.Amis.MF936\obj\Debug\net5.0\MISA.Amis.MF936.genruntimeconfig.cache
+C:\Workspace\INTERN\MISA-AMIS-DEMO\MISA.Amis.MF936.API\MISA.Amis.MF936\obj\Debug\net5.0\MISA.Amis.MF936.MvcApplicationPartsAssemblyInfo.cs

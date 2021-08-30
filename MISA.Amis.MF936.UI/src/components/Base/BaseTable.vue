@@ -12,7 +12,10 @@
 			<div v-on="tooltipListeners('Tải lại dữ liệu')" class="table__reload">
 				<div class="table__reload-icon"></div>
 			</div>
-			<div v-on="tooltipListeners('Thêm mới từ file Excel')" class="table__import">
+			<div
+				v-on="tooltipListeners('Thêm mới từ file Excel')"
+				class="table__import"
+			>
 				<div class="table__import-icon"></div>
 			</div>
 		</div>
@@ -22,7 +25,7 @@
 			<thead class="table__header">
 				<tr class="table__row">
 					<td class="table__data">
-						<base-checkbox/>
+						<base-checkbox />
 					</td>
 					<td
 						v-for="(item, index) in tableStyle"
@@ -36,9 +39,9 @@
 			</thead>
 			<!-- TABLE BODY -->
 			<tbody class="table__body">
-				<tr v-for="(item, index) in tableData" class="table__row" :key="index">
+				<tr @dblclick="trOnDbClick(index)" v-for="(item, index) in tableData" class="table__row" :key="index">
 					<td class="table__data table__data--checkbox">
-						<base-checkbox/>
+						<base-checkbox />
 					</td>
 					<td v-for="(itm, idx) in tableStyle" class="table__data" :key="idx">
 						{{ item[itm["field"]] }}
@@ -62,9 +65,7 @@
 			</tbody>
 			<base-menu-popup
 				:menuPopupState="menuPopupState"
-				:menuPopupTop="menuPopupTop"
-				:menuPopupLeft="menuPopupLeft"
-				:menuPopupType="menuPopupType"
+				:menuPopupPosition="menuPopupPosition"
 			/>
 		</table>
 		<base-pagination />
@@ -72,12 +73,12 @@
 </template>
 <script>
 	// LIBRARY
-	import Mixin from '../../Mixins/Mixin.js'
+	import Mixin from "../../Mixins/Mixin.js";
 
 	// COMPONENTS
-	import BasePagination from "./BasePagination.vue"
-	import BaseMenuPopup from "./BaseMenuPopup.vue"
-	import BaseCheckbox from './BaseCheckbox.vue'
+	import BasePagination from "./BasePagination.vue";
+	import BaseMenuPopup from "./BaseMenuPopup.vue";
+	import BaseCheckbox from "./BaseCheckbox.vue";
 
 	export default {
 		name: "BaseTable",
@@ -85,7 +86,7 @@
 		components: {
 			BasePagination,
 			BaseMenuPopup,
-			BaseCheckbox
+			BaseCheckbox,
 		},
 		props: {
 			tableStyle: {
@@ -104,13 +105,19 @@
 		data() {
 			return {
 				menuPopupState: false,
-				menuPopupLeft: 0,
-				menuPopupTop: 0,
 				menuPopupIndex: -1,
-				menuPopupType: "",
+				menuPopupPosition: {},
 			};
 		},
 		methods: {
+			/**
+			 * Xử lý sự kiện dblclick vào một bản ghi
+			 * @param {number} index
+			 * CreatedBy: NTDUNG (30/08/2021)
+			 */
+			trOnDbClick(index) {
+				this.$bus.$emit('showForm', 'Update' + index);
+			},
 			/**
 			 * Xử lý sự kiện click vào menu popup
 			 * @param {event} event
@@ -133,12 +140,12 @@
 
 				if (this.menuPopupState) {
 					if (this.menuPopupIndex != index) {
-						this.showMenuPopup(event.clientX, event.clientY, index);
+						this.showMenuPopup(event, index);
 					} else {
 						this.hideMenuPopup();
 					}
 				} else {
-					this.showMenuPopup(event.clientX, event.clientY, index);
+					this.showMenuPopup(event, index);
 				}
 			},
 			/**
@@ -148,31 +155,32 @@
 			 */
 			menuPopupOnBlur(event) {
 				this.menuPopupState = false;
-				event.target.classList.remove('menu-popup--selected');
+				event.target.classList.remove("menu-popup--selected");
 			},
 			/**
 			 * Hiển thị menu popup
-			 * @param {number} clientX
-			 * @param {number} clientY
+			 * @param {event} event
 			 * @param {number} index chỉ số của dòng
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
-			showMenuPopup(clientX, clientY, index) {
-				// Kiểm tra vị trí chuột để show loại menu popup đúng (DOWN/ UP)
-				if (
-					clientY + this.paginationHeight + this.menuPopupTable <=
-					window.innerHeight
-				) {
-					this.menuPopupType = "down";
-				} else {
-					this.menuPopupType = "up";
-				}
+			showMenuPopup(event, index) {
+				var element = event.target.classList.contains("menu-popup__icon")
+					? event.target.parentElement
+					: event.target;
+
+
+				// Gán toạ độ lấy được từ event
+				var elementRect = element.getBoundingClientRect();
+				this.menuPopupPosition = {
+					top: elementRect.top,
+					bottom: elementRect.bottom,
+					right: elementRect.right,
+					left: elementRect.left,
+				};
 
 				// Hiển thị menu popup
 				this.menuPopupIndex = index;
 				this.menuPopupState = true;
-				this.menuPopupLeft = clientX;
-				this.menuPopupTop = clientY;
 			},
 			/**
 			 * Ẩn menu popup
