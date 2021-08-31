@@ -39,7 +39,7 @@
 			</thead>
 			<!-- TABLE BODY -->
 			<tbody class="table__body">
-				<tr @dblclick="trOnDbClick(index)" v-for="(item, index) in tableData" class="table__row" :key="index">
+				<tr @dblclick="trOnDbClick(item['EmployeeId'])" v-for="(item, index) in tableData" class="table__row" :key="index">
 					<td class="table__data table__data--checkbox">
 						<base-checkbox />
 					</td>
@@ -112,11 +112,11 @@
 		methods: {
 			/**
 			 * Xử lý sự kiện dblclick vào một bản ghi
-			 * @param {number} index
+			 * @param {string} id
 			 * CreatedBy: NTDUNG (30/08/2021)
 			 */
-			trOnDbClick(index) {
-				this.$bus.$emit('showForm', 'Update' + index);
+			trOnDbClick(id) {
+				this.$bus.$emit('showForm', {mode: 'update', id: id});
 			},
 			/**
 			 * Xử lý sự kiện click vào menu popup

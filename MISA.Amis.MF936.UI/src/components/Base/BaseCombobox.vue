@@ -1,13 +1,17 @@
 <template lang="">
-	<div class="combobox" :class="{ 'combobox--up': comboboxType == 'up', 'combobox--show': comboboxState }">
-		<span v-if="label != ''" class="label"> {{ label }} <span v-if="required" class="text-red">*</span> </span>
+	<div
+		class="combobox"
+		:class="{
+			'combobox--up': comboboxType == 'up',
+			'combobox--show': comboboxState,
+		}"
+	>
+		<span v-if="label != ''" class="label">
+			{{ label }} <span v-if="required" class="text-red">*</span>
+		</span>
 		<div class="combobox__main">
 			<div class="combobox__value">
-			<input
-				type="text"
-				class="combobox__input"
-				:value="comboboxData[currIdx]"
-			/>
+				<input type="text" class="combobox__input" :value="comboboxValue" />
 			</div>
 			<div @click="comboboxState = !comboboxState" class="combobox__button">
 				<div class="combobox__button-icon"></div>
@@ -20,10 +24,10 @@
 					@click="comboboxItemOnClick(index)"
 					:key="index"
 				>
-					{{ item }}
+					{{ item[field + "Name"] }}
 				</li>
 			</ul>
-		</div>	
+		</div>
 	</div>
 </template>
 <script>
@@ -36,25 +40,49 @@
 			},
 			label: {
 				type: String,
-				default: ""
+				default: "",
 			},
 			required: {
 				type: Boolean,
-				default: false
+				default: false,
+			},
+			comboboxData: {
+				type: Array,
+				default: function() {
+					return [];
+				},
+			},
+			field: {
+				type: String,
+				default: "",
+			},
+			value: {
+				type: String,
+				default: "",
+			},
+			default: {
+				type: Number,
+				default: -1
 			}
 		},
 		data() {
 			return {
-				currIdx: 1,
-				comboboxData: [
-					"20 bản ghi trên 1 trang",
-					"30 bản ghi trên 1 trang",
-					"40 bản ghi trên 1 trang",
-					"50 bản ghi trên 1 trang",
-					"60 bản ghi trên 1 trang",
-				],
+				currIdx: -1,
 				comboboxState: false,
 			};
+		},
+		computed: {
+			comboboxValue() {
+				// Nếu có giá trị mặc định thì sử dụng
+				if (this.default != -1)
+					this.comboboxItemOnClick(this.default);
+					
+				// Nếu index = -1 thì đưa về mặc định
+				// Còn lại lấy giá trị trong mảng
+				return this.currIdx == -1
+					? `Chọn ${this.label}`
+					: this.comboboxData[this.currIdx][this.field + "Name"];
+			},
 		},
 		methods: {
 			/**
@@ -65,8 +93,29 @@
 			comboboxItemOnClick(index) {
 				this.currIdx = index;
 				this.comboboxState = false;
-			}
-		}
+			},
+		},
+		watch: {
+			/**
+			 * Khi chuyển giá trị mới thì đổi currI;dx
+			 * @param {string} value
+			 * CreatedBy: NTDUNG (31/08/2021)
+			 */
+			value: function(value) {
+				this.currIdx = this.comboboxData.findIndex((item) => {
+					return item[this.field + "Id"] == value;
+				});
+			},
+			/**
+			 * Khi thay đổi currIdx thì cập nhật giá trị mới
+			 * @param {number} value
+			 * CreatedBy: NTDUNG (31/08/2021)
+			 */
+			// currIdx: function(value) {
+			// 	// Gọi đến sự kiện phía cha
+			// 	console.log(value);
+			// },
+		},
 	};
 </script>
 <style lang=""></style>

@@ -61,13 +61,13 @@ namespace MISA.Amis.Infrastucture.Repository
         public virtual MISAEntity GetById(Guid entityId)
         {
 
-            var sqlQuery = $"SELECT * FROM {_entityName} WHERE {_entityName}Id = @entityId";
-            var parameters = new DynamicParameters();
+            var storeName = $"Proc_Get{_entityName}ById";
 
-            parameters.Add("@entityId", entityId);
+            var parameters = new DynamicParameters();
+            parameters.Add("@m_id", entityId);
 
             // Lấy dữ liệu và phản hồi cho client
-            return _dbConnection.QueryFirstOrDefault<MISAEntity>(sqlQuery, param: parameters);
+            return _dbConnection.QueryFirstOrDefault<MISAEntity>(storeName, commandType: CommandType.StoredProcedure,param: parameters);
         }
 
         #endregion

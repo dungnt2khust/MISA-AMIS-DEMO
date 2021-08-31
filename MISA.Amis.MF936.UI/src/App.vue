@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <the-loading
+      :loadingState="loadingState"
+    />
     <employee-menu 
       :menuState="menuState"
       @toggleMenu="toggleMenu"/>
@@ -11,6 +14,7 @@
     </div>
     <base-tooltip/>
     <base-form/>
+    <base-dialog/> 
   </div>
 </template>
 
@@ -22,6 +26,8 @@
   import TheContent from './components/Layout/TheContent.vue'
   import BaseTooltip from './components/Base/BaseTooltip.vue'
   import BaseForm from './components/Base/BaseForm.vue'
+  import BaseDialog from './components/Base/BaseDialog.vue'
+  import TheLoading from './components/Layout/TheLoading.vue'
 
   export default {
     name: 'App',
@@ -30,16 +36,22 @@
       EmployeeHeader: TheHeader,
       EmployeeContent: TheContent,
       BaseTooltip,
-      BaseForm
+      BaseForm,
+      BaseDialog,
+      TheLoading
     }, 
     data() {
       return {
-        menuState: true
+        menuState: true,
+        loadingState: false
       }
-    },
-    mounted() {
-      // this.setTooltipEvent();
-    },
+    },  
+    mounted () {
+      this.loadingState = true;
+      setTimeout(() => {
+        this.loadingState = false;
+      }, 500);
+    }, 
     methods: {
       /**
        * Toggle menu 

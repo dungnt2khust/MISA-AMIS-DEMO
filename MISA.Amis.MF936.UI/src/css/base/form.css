@@ -1,11 +1,11 @@
 :root {
 
-    /* COLOR */
+    /* color */
     --form-overlay-color: rgba(0, 0, 0, 0.4);
     --form-main-color: #FFF;
 }
 
-/* FORM */
+/* form */
 .form {
     position: fixed;
     top: 0;
@@ -13,52 +13,52 @@
     bottom: 0;
     left: 0;
     z-index: 9999;
-    box-sizing: border-box;
-}
-    /* FORM OVERLAY */
-    .form__overlay {
-        height: 100%;
-        width: 100%;
-        background-color: var(--form-overlay-color);
-    }
-    /* FORM MAIN */
+    background-color: var(--form-overlay-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} 
+    /* form main */
     .form__main {
-        /* cursor: grab; */
+        cursor: grab;
         width: 900px;
         height: 625px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        min-width: 900px;
+        min-height: 625px;
         background-color: var(--form-main-color);
         display: flex;
         flex-direction: column;
+        animation: 0.2s formIn;
+        position: relative;
     }
-        /* FORM HEADER */
+    .form__main:active {
+        cursor: grab !important;
+    }
+        /* form header */
         .form__header {
             height: 73px;
             display: flex;
             justify-content: space-between;
         }
-            /* FORM HEADER CONTENT */
+            /* form header content */
             .form__header-content {
                 padding: 20px 12px 20px 32px;
                 display: flex;
             }
-                /* FORM TITLE */
+                /* form title */
                 .form__title {
                     font-size: 24px;
                     font-weight: 800;
                     font-family: MISANotoSan-Bold;
                 }
-                /* FORM CHECKLIST */
+                /* form checklist */
                 .form__checklist {
                     margin-left: 20px;
                 }
                     .form__checklist .checkbox {
                         margin-right: 40px;
                     }
-            /* FORM ACTION*/
+            /* form action*/
             .form__action {
                 height: 100%;
                 width: 78px;
@@ -67,7 +67,7 @@
                 justify-content: center;
                 align-items: flex-start;
             }
-                /* FORM HELP */
+                /* form help */
                 .form__help {
                     width: 24px;
                     height: 24px;
@@ -80,7 +80,7 @@
                         width: 22px;
                         height: 22px;
                     }
-                /* FORM CANCEL */
+                /* form cancel */
                 .form__cancel {
                     width: 24px;
                     height: 24px;
@@ -97,7 +97,7 @@
                         width: 18px;
                         height: 18px;
                     }
-        /* FORM BODY */
+        /* form body */
         .form__body {
             flex: 1;
             display: flex;
@@ -117,20 +117,31 @@
             .form__body-item.fx div:last-child {
                 margin-right: 0;
             }
-        /* FORM FOOTER */
+        /* form footer */
         .form__footer {
             padding: 20px 32px 32px;
             display: flex;
             justify-content: space-between;
         }
-            /* FORM BUTTON CANCEL */
+            /* form button cancel */
             .form__button-cancel {
 
             }
-            /* FORM CONTROL */
+            /* form control */
             .form__control {
                 display: flex;
             }
                 .form__control .button:nth-child(1){
                     margin: 0 10px;
                 }
+
+@keyframes formIn {
+    from {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

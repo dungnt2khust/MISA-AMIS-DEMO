@@ -125,7 +125,7 @@
                 padding: 0 10px;
                 white-space: nowrap;
                 height: 34px;
-                background-color: var(--table-header-color);
+                background-color: var(--table-header-color) !important;
                 border-right: 1px solid var(--border-color);
                 border-bottom: 1px solid var(--border-color);
             } 
@@ -138,7 +138,7 @@
 
             } 
             .table__row:hover .table__data{
-                background-color: var(--table-background-hover-color) !important;
+                background-color: var(--table-background-hover-color);
             }
                 /* TABLE CHECKBOX */
                 .table__checkbox {

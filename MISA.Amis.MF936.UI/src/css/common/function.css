@@ -2,6 +2,9 @@
 .non-select-text {
     user-select: none !important;
 }
+.border-error {
+    border-color: red !important;
+}
 .fx-center {
     display: flex !important;
     justify-content: center !important;

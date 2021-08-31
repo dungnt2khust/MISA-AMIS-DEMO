@@ -79,11 +79,14 @@
 			 * CreatedBy: NTDUNG (30/08/2021)
 			 */
 			getInfos() {
+				// Số ngày trong một tháng
 				var daysInMonth = new Date(
 					this.curr.year,
 					this.curr.month,
 					0
 				).getDate();
+
+				// Nyày đầu tiên là thứ mấy
 				var dayBegin = new Date(
 					`${this.curr.year}-${this.curr.month}-1`
 				).getDay();
@@ -147,6 +150,7 @@
 				this.curr.date = currDate.getDate();
 				this.curr.month = currDate.getMonth() + 1;
 				this.curr.year = currDate.getFullYear();
+
 				this.selected.date = currDate.getDate();
 				this.selected.month = currDate.getMonth() + 1;
 				this.selected.year = currDate.getFullYear();
@@ -157,12 +161,26 @@
 			 * CreatedBy: NTDUNG (30/08/2021)
 			 */
 			dateOnClick(date) {
-				// Nếu date khác rỗng và undefined thì đặt ngày
-				this.selected.month = this.curr.month;
-				this.selected.year = this.curr.year;
-				this.selected.date = date;
+				this.$set(this.selected, 'date', date);
+				this.$set(this.selected, 'month', this.curr.month);
+				this.$set(this.selected, 'year', this.curr.year);
 			},
 		},
+		watch: {
+			/**
+			 * Theo dõi sự thay đổi của ngày được pick và xử lý sự kiện
+			 * @param {object} value
+			 * CreatedBy: NTDUNG (30/08/2021)
+			 */	
+			selected: {
+				handler(newVal){  
+					this.$emit('selectedADate', newVal);
+					this.$emit('hideDatepicker');
+				},
+				deep: true,
+				// immediate: true
+			}
+		}
 	};
 </script>
 <style lang=""></style>

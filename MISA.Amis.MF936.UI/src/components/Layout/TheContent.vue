@@ -48,29 +48,19 @@
             axios.get('https://localhost:44342/api/v1/employees')
                 .then(res => {
                     // Gán dữ liệu vào biến prop sang BaseTable
-                    console.log(res);
                     this.tableData = res.data;
                 })
                 .catch(res => {
                     console.log(res);
                 })
         },
-        methods: {
-            func() {
-                this.func2();
-            },
-            func2() {
-                this.func3();
-            },
-            func3() {
-                console.log('end')
-            },
+        methods: { 
             /**
              * Sự kiện nhấn vào nút Add
              * CreatedBy: NTDUNG (29/08/2021)
              */
             contentAddOnClick() {
-                this.$bus.$emit('showForm', 'Add');
+                this.$bus.$emit('showForm', {mode: 'add'});
             }
         }
     }

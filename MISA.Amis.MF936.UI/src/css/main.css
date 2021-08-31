@@ -21,11 +21,13 @@
 @import url('./base/radio.css');
 @import url('./base/inputdate.css');
 @import url('./base/datepicker.css');
+@import url('./base/dialog.css');
 
 /* LAYOUT */
 @import url('./layout/menu.css');
 @import url('./layout/header.css');
 @import url('./layout/content.css');
+@import url('./layout/loading.css');
 
 
 
