@@ -1,6 +1,6 @@
 <template lang="">
 	<div id="menu" :class="{ 'menu--small': !menuState }">
-		<div class="menu__home">
+		<div class="menu__home" :class="{'fx-center': !menuState}">
 			<div v-show="menuState" class="menu__grid"></div>
 			<div v-show="!menuState" @click="$emit('toggleMenu')" class="menu__toggle">
 				<div class="menu__toggle-icon"></div>
@@ -17,6 +17,7 @@
 				v-for="(item, index) in menuList"
 				href="#"
 				class="menu__item"
+				:class="{'fx-center': !menuState}"
 				v-on="tooltipListeners(item['name'])"
 				:key="index"
 			>
@@ -37,11 +38,11 @@
 </template>
 <script>
 	// LIBRARY
-	import Mixin from '../../Mixins/Mixin.js'
+	import listeners from '../../Mixins/listeners.js'
 
 	export default {
 		name: "TheMenu",
-		mixins: [Mixin],
+		mixins: [listeners],
 		props: {
 			menuState: {
 				type: Boolean,

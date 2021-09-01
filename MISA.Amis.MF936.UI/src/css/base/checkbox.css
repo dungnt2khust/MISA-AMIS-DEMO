@@ -7,8 +7,8 @@
     align-items: center;
     cursor: pointer;
 }
-    /* CHECKBOX VALUE */
-    .checkbox__value {
+    /* CHECKBOX LABEL */
+    .checkbox__label {
         margin-left: 10px;
         font-size: 13px;
     }
@@ -53,5 +53,8 @@
             .checkbox--selected .checkbox__icon {
                 display: block;
             }
+        .checkbox--disable .checkbox__main {
+            opacity: 0.5;
+        }
         
         

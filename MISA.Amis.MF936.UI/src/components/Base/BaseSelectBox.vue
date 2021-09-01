@@ -32,7 +32,7 @@
 </template>
 <script>
 	// LIBRARY
-	import Mixin from "../../Mixins/Mixin.js";
+	import Mixin from "../../Mixins/listeners.js";
 
 	export default {
 		name: "BaseSelectBox",

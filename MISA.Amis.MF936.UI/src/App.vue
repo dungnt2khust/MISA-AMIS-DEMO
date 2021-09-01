@@ -1,20 +1,21 @@
 <template>
   <div id="app">
-    <the-loading
-      :loadingState="loadingState"
-    />
-    <employee-menu 
+    
+    <the-menu 
       :menuState="menuState"
       @toggleMenu="toggleMenu"/>
     <div id="wrapper">
-      <employee-header 
+      <the-header 
       :menuState="menuState"
       @toggleMenu="toggleMenu"/>
-      <employee-content/>
+      <employee-page/>
     </div>
+    <employee-detail/>
     <base-tooltip/>
-    <base-form/>
     <base-dialog/> 
+    <the-loading
+      :loadingState="loadingState"
+    />
   </div>
 </template>
 
@@ -23,22 +24,23 @@
   // COMPONENT
   import TheMenu from './components/Layout/TheMenu.vue'
   import TheHeader from './components/Layout/TheHeader.vue'
-  import TheContent from './components/Layout/TheContent.vue'
   import BaseTooltip from './components/Base/BaseTooltip.vue'
-  import BaseForm from './components/Base/BaseForm.vue'
   import BaseDialog from './components/Base/BaseDialog.vue'
   import TheLoading from './components/Layout/TheLoading.vue'
+
+  import EmployeeDetail from './components/views/employee/EmployeeDetail.vue'
+  import EmployeePage from './components/views/employee/EmployeePage.vue'
 
   export default {
     name: 'App',
     components: {
-      EmployeeMenu: TheMenu,
-      EmployeeHeader: TheHeader,
-      EmployeeContent: TheContent,
+      EmployeePage,
+      EmployeeDetail,
+      TheMenu,
+      TheHeader,
+      TheLoading,
       BaseTooltip,
-      BaseForm,
       BaseDialog,
-      TheLoading
     }, 
     data() {
       return {

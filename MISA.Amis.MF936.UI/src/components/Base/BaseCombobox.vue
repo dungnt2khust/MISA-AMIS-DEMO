@@ -57,12 +57,12 @@
 				default: "",
 			},
 			value: {
-				type: String,
-				default: "",
+				type: [String, Number],
+				default: null
 			},
-			default: {
-				type: Number,
-				default: -1
+			passIndex: {
+				type: Boolean,
+				default: true,
 			}
 		},
 		data() {
@@ -73,15 +73,27 @@
 		},
 		computed: {
 			comboboxValue() {
-				// Nếu có giá trị mặc định thì sử dụng
-				if (this.default != -1)
-					this.comboboxItemOnClick(this.default);
-					
-				// Nếu index = -1 thì đưa về mặc định
-				// Còn lại lấy giá trị trong mảng
-				return this.currIdx == -1
-					? `Chọn ${this.label}`
-					: this.comboboxData[this.currIdx][this.field + "Name"];
+				if (this.currIdx == -1) {
+					// Nếu không có giá trị truyền vào
+					if (this.value == null)
+						return `Chọn ${this.label}`;
+					// Nếu có thì kiểm tra là giá trị hay index
+					else {
+						// Là index thì gán vào index hiện tại
+						if (this.passIndex) 
+							this.comboboxItemOnClick(this.value);
+						else {
+							// Nếu là giá trị thì so sánh với phần tử trong mảng để tìm ra index
+							var foundIdx = this.comboboxData.findIndex(item => {
+								return item[this.field + "Id"] == this.value;
+							});
+							this.comboboxItemOnClick(foundIdx);
+						}		
+						return this.comboboxData[this.currIdx][this.field + "Name"];
+					}
+				} else {
+					return this.comboboxData[this.currIdx][this.field + "Name"];
+				}
 			},
 		},
 		methods: {
@@ -97,24 +109,21 @@
 		},
 		watch: {
 			/**
-			 * Khi chuyển giá trị mới thì đổi currI;dx
-			 * @param {string} value
-			 * CreatedBy: NTDUNG (31/08/2021)
-			 */
-			value: function(value) {
-				this.currIdx = this.comboboxData.findIndex((item) => {
-					return item[this.field + "Id"] == value;
-				});
-			},
-			/**
 			 * Khi thay đổi currIdx thì cập nhật giá trị mới
-			 * @param {number} value
+			 * @param {number, string} value
 			 * CreatedBy: NTDUNG (31/08/2021)
+			 * ModifiedBy: NTUDNG (01/09/2021)
 			 */
-			// currIdx: function(value) {
-			// 	// Gọi đến sự kiện phía cha
-			// 	console.log(value);
-			// },
+			currIdx: function(value) {
+				// Nếu là index thì emit index
+				if (this.passIndex) {
+					this.$emit('input', value);
+				}
+				// Nếu là giá trị thì emit giá trị
+				else {
+					this.$emit('input', this.comboboxData[value][this.field + 'Id']);
+				}
+			},
 		},
 	};
 </script>

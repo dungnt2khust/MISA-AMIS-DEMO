@@ -10,8 +10,8 @@
 				<div class="form__header-content">
 					<div class="form__title">Thông tin nhân viên</div>
 					<div class="form__checklist fx">
-						<base-checkbox label="Là khách hàng" />
-						<base-checkbox label="Là nhà cung cấp" />
+						<base-checkbox :state="data['IsCustomer']" label="Là khách hàng" />
+						<base-checkbox :state="data['IsSupplier']" label="Là nhà cung cấp" />
 					</div>
 				</div>
 				<div class="form__action">
@@ -55,10 +55,11 @@
 					<base-combobox
 						label="Đơn vị"
 						:required="true"
-						:comboboxData="comboboxData"
+						:comboboxData="departmentData"
 						field="Department"
 						:value="data['DepartmentId']"
 						v-model="data['DepartmentId']"
+						:passIndex="false"
 					/>
 				</div>
 				<div class="form__body-item fx">
@@ -152,19 +153,20 @@
 </template>
 <script>
 	// LIBRARY
-	import axios from "axios";
-	import Mixin from "../../Mixins/listeners.js";
+	import listeners from "../../../Mixins/listeners.js";
+    import employeeAPI from "../../../js/components/employeeAPI"
+    import baseAPI from "../../../js/base/baseAPI"
 
 	// COMPONENTS
-	import BaseInput from "./BaseInput.vue";
-	import BaseInputDate from "./BaseInputDate.vue";
-	import BaseCombobox from "./BaseCombobox.vue";
-	import BaseCheckbox from "./BaseCheckbox.vue";
-	import BaseRadio from "./BaseRadio.vue";
+	import BaseInput from "../../Base/BaseInput.vue";
+	import BaseInputDate from "../../Base/BaseInputDate.vue";
+	import BaseCombobox from "../../Base/BaseCombobox.vue";
+	import BaseCheckbox from "../../Base/BaseCheckbox.vue";
+	import BaseRadio from "../../Base/BaseRadio.vue";
 
 	export default {
-		name: "BaseForm",
-		mixins: [Mixin],
+		name: "EmployeeDetail",
+		mixins: [listeners],
 		components: {
 			BaseInput,
 			BaseCombobox,
@@ -176,21 +178,26 @@
 			return {
 				formState: false,
 				data: [],
-				comboboxData: [],
+				departmentData: [],
 				dragState: false,
-				dragX: 0,
-				dragY: 0,
+				distanceX: 0,
+				distanceY: 0,
+				departmentAPI: new baseAPI('Departments')
 			};
 		},
 		computed: {
+            /**
+             * Lắng nghe sự kiện trên form
+             * CreatedBy: NTDUNG (31/08/2021)
+             */
 			formListeners: function() {
-				var dragXBegin, dragXEnd, dragYBegin, dragYEnd;
+				var posXBegin, posXEnd, posYBegin, posYEnd;
 				return Object.assign({}, this.$listener, {
 					// Nhấn xuống thì đặt vị trí bắt đầu và bật mode drag
 					mousedown: (event) => {
 						this.dragState = true;
-						dragXBegin = event.clientX;
-						dragYBegin = event.clientY;
+						posXBegin = event.clientX;
+						posYBegin = event.clientY;
 					},
 					// Tắt mode drag khi nhấc chuột
 					mouseup: () => {
@@ -204,10 +211,10 @@
 					mousemove: (event) => {
 						if (this.dragState) {	
 							// Gán vị trí mới
-							dragXEnd = event.clientX;
-							dragYEnd = event.clientY;
-							this.dragY = dragYEnd - dragYBegin;
-							this.dragX = dragXEnd - dragXBegin;
+							posXEnd = event.clientX;
+							posYEnd = event.clientY;
+							this.distanceY= posYEnd - posYBegin;
+							this.distanceX = posXEnd - posXBegin;
 						}
 					},
 				});
@@ -217,7 +224,7 @@
 			 * CreatedBy: NTDUNG (31/08/2021)
 			 */
 			positionOfForm() {
-				return { top: this.dragY + "px", left: this.dragX + "px" };
+				return { top: this.distanceY + "px", left: this.distanceX + "px" };
 			},
 		},
 		created() {
@@ -230,6 +237,7 @@
 				// Lấy dữ liệU cho combobox
 				this.getComboboxData();
 
+				// Kiểm tra với các trường hợp show
 				switch (data.mode) {
 					case "update":
 						// Lấy dữ liệu đẩy lên form
@@ -256,8 +264,7 @@
 			 * CreatedBy: NTDUNG (30/08/2021)
 			 */
 			getData(id) {
-				axios
-					.get(`https://localhost:44342/api/v1/employees/` + id)
+                employeeAPI.getById(id)
 					.then((res) => {
 						// Gán dữ liệu vào mảng chứa
 						this.data = res.data;
@@ -271,8 +278,7 @@
 			 * CreatedBy: NTDUNG (31/08/2021)
 			 */
 			getNewCode() {
-				axios
-					.get("https://localhost:44342/api/v1/employees/NewEmployeeCode")
+				employeeAPI.getNewEmployeeCode()
 					.then((res) => {
 						// Gán code mới vào mảng
 						this.$set(this.data, "EmployeeCode", res.data.Data);
@@ -285,12 +291,11 @@
 			 * Lấy dữ liệu đổ vào combobox
 			 * CreatedBy: NTDUNG (31/08/2021)
 			 */
-			getComboboxData() {
-				axios
-					.get("https://localhost:44342/api/v1/departments")
+			getComboboxData() {	
+				this.departmentAPI.getAll()
 					.then((res) => {
 						// Gán dữ liệu vào mảng chứa
-						if (res.status == 200) this.comboboxData = res.data;
+						if (res.status == 200) this.departmentData = res.data;
 					})
 					.catch((res) => {
 						console.log(res);

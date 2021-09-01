@@ -51,14 +51,12 @@ namespace MISA.Amis.Core.Services
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <param name="filterString"></param>
-        /// <param name="departmentId"></param>
-        /// <param name="positionId"></param>
         /// <returns> Kết quả nghiệp vụ phân trang và lọc dữ liệu</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
-        /// ModifiedBy: NTDUNG (27/08/2021)
-        public ServiceResult GetByFilter(int pageSize, int pageNumber, string filterString, Guid? departmentId, Guid? positionId)
+        /// ModifiedBy: NTDUNG (01/09/2021)
+        public ServiceResult GetByFilter(int pageSize, int pageNumber, string filterString)
         {
-            _serviceResult.Data = _employeeRepository.GetByFilter(pageSize, pageNumber, filterString, departmentId, positionId);
+            _serviceResult.Data = _employeeRepository.GetByFilter(pageSize, pageNumber, filterString);
             _serviceResult.IsValid = _serviceResult.Data != null;
             return _serviceResult;
         }

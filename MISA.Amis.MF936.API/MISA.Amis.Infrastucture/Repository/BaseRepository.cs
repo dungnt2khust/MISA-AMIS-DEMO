@@ -60,7 +60,6 @@ namespace MISA.Amis.Infrastucture.Repository
         /// CreatedBy: NTDUNG (27/08/2021)
         public virtual MISAEntity GetById(Guid entityId)
         {
-
             var storeName = $"Proc_Get{_entityName}ById";
 
             var parameters = new DynamicParameters();

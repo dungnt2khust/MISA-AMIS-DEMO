@@ -113,17 +113,22 @@ namespace MISA.Amis.Core.Entities
         /// </summary>
         [MISANotMap]
         public string DepartmentName { get; set; }
-
-        /// <summary>
-        /// id vị trí
-        /// </summary>
-        public Guid? PossitionId { get; set; }
-
+ 
         /// <summary>
         /// Tên vị trí / chức vụ
         /// </summary>
         [MISANotMap]
-        public string PossitionName { get; set; }
+        public string PositionName { get; set; }
+        
+        /// <summary>
+        /// Là khách hàng
+        /// </summary>
+        public int? IsCustomer { get; set; }
+        /// <summary>
+        /// Là nhà cung cấp
+        /// </summary>
+
+        public int? IsSupplier { get; set; }
         #endregion
     }
 }

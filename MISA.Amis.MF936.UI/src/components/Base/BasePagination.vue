@@ -1,36 +1,38 @@
 <template lang="">
 	<div class="pagination">
 		<div class="pagination__desc">
-			Tổng số: <span class="text-bold">54</span> bản ghi
+			Tổng số: <span class="text-bold"> {{ totalRecord }}</span> bản ghi
 		</div>
 		<div class="pagination__control">
 			<base-combobox
-				:comboboxData="comboboxData"
+				:comboboxData="paginationData"
 				field="Pagination"
 				class="pagination__select"
-				:default="defaultOption"
 				comboboxType="up"
+				:value="currOptionTranfer"
+				v-model="currOptionTranfer"
 			/>
 			<div class="pagination__redirect">
 				<div
 					class="pagination__prev non-select-text"
-					:class="{ 'pagination--disable': currIdx == 1 }"
+					:class="{ 'pagination--disable': currPageTranfer == 1 }"
 					@click="paginationPrevOnClick()"
 				>
 					Trước
 				</div>
 				<div
-					v-for="index in numDisplayPage"
+					v-for="index in totalPage"
+					v-show="displayItems(index)"
 					class="pagination__index non-select-text"
-					:class="{ 'pagination__index--selected': index == currIdx }"
-					@click="currIdx = index"
+					:class="{ 'pagination__index--selected': index == currPageTranfer }"
+					@click="currPageTranfer = index"
 					:key="index"
 				>
 					{{ index }}
 				</div>
 				<div
 					class="pagination__next non-select-text"
-					:class="{ 'pagination--disable': currIdx == totalPage }"
+					:class="{ 'pagination--disable': currPageTranfer == totalPage }"
 					@click="paginationNextOnClick()"
 				>
 					Sau
@@ -48,34 +50,104 @@
 		components: {
 			BaseCombobox,
 		},
+		props: {
+			totalPage: {
+				type: Number,
+				default: 0,
+			},
+			totalRecord: {
+				type: Number,
+				default: 0,
+			},
+			currPage: {
+				type: Number,
+				default: 0,
+			},
+			currOption: {
+				type: Number,
+				default: 0,
+			},
+			paginationData: {
+				type: Array,
+				default: function() {
+					return [];
+				},
+			},
+		},
 		data() {
 			return {
-				currIdx: 1,
-				numDisplayPage: 3,
-				totalPage: 3,
-				comboboxData: [
-					{ PaginationId: 20, PaginationName: "20 bản ghi trên 1 trang" },
-					{ PaginationId: 30, PaginationName: "30 bản ghi trên 1 trang" },
-					{ PaginationId: 40, PaginationName: "40 bản ghi trên 1 trang" },
-					{ PaginationId: 50, PaginationName: "50 bản ghi trên 1 trang" },
-				],
-				defaultOption: 0
+				numDisplayPage: 4,
+				currPageTranfer: this.currPage,
+				currOptionTranfer: this.currOption,
 			};
 		},
 		methods: {
+			/**
+			 * Hiển thị các item của pagination
+			 * @param {Number} index
+			 * CreatedBy: NTDUNG (01/09/2021)
+			 */
+			displayItems(index) {
+				// Làm tròn
+				var idxDisplay = Math.ceil(this.currPageTranfer / this.numDisplayPage);
+
+				if (this.totalPage - this.currPage <= this.numDisplayPage - 1) {
+					return (
+						index <= this.totalPage &&
+						index >= this.totalPage - this.numDisplayPage + 1
+					);
+				}
+				return (
+					index <= idxDisplay * this.numDisplayPage &&
+					index >= (idxDisplay - 1) * this.numDisplayPage + 1
+				);
+			},
 			/**
 			 * Xử lý sự kiện click vào nút Prev
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			paginationPrevOnClick() {
-				if (this.currIdx != 1) this.currIdx--;
+				if (this.currPageTranfer != 1) this.currPageTranfer--;
 			},
 			/**
 			 * Xử lý sự kiện click vào nút Next
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			paginationNextOnClick() {
-				if (this.currIdx != this.totalPage) this.currIdx++;
+				if (this.currPageTranfer != this.totalPage) this.currPageTranfer++;
+			},
+		},
+		watch: {
+			/**
+			 * Khi currPage thay đổi thì đặt lại vị trí
+			 * @param {Number} index
+			 * CreatedBy: NTDUNG (01/09/2021)
+			 */
+			currPage: function(index) {
+				this.currPageTranfer = index;
+			},
+			/**
+			 * Khi currPageTranfer thay đổi thì emit ra component cha
+			 * @param {Number} index
+			 * CreateBy: NTDUNG (01/09/2021)
+			 */
+			currPageTranfer: function(index) {
+				this.$emit("changePageInfo", {
+					currPage: index,
+					currOption: this.currOption,
+				});
+			},
+			/**
+			 * Sự kiện khi lựa chọn thay đổi
+			 * @param {Number} index
+			 * CreatedBy: NTDUNG (01/09/2021)
+			 */
+			currOptionTranfer: function(index) {
+				// Khi currOption thay đổi thì currPage set về 1
+				this.$emit("changePageInfo", {
+					currPage: 1,
+					currOption: index,
+				});
 			},
 		},
 	};

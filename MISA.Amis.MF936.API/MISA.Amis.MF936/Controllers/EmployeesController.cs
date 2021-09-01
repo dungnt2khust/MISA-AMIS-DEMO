@@ -70,13 +70,13 @@ namespace MISA.Amis.MF936.Controllers
         /// <param name="positionId"></param>
         /// <returns> Mã code trả về và dữ liệu hoặc mã lỗi của request</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
-        [HttpGet("employeeFilter")]
+        [HttpGet("filter")]
         public IActionResult GetEmployeeFilter(int pageSize, int pageNumber,
-                                                string filterString, Guid? departmentId, Guid? positionId)
+                                                string filterString)
         {
             try
             {
-                _serviceResult = _employeeService.GetByFilter(pageSize, pageNumber, filterString, departmentId, positionId);
+                _serviceResult = _employeeService.GetByFilter(pageSize, pageNumber, filterString);
 
                 if (!_serviceResult.IsValid)
                 {

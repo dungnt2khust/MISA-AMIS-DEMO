@@ -18,12 +18,10 @@ namespace MISA.Amis.Core.Interfaces.Repositoties
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <param name="filterString"></param>
-        /// <param name="departmentId"></param>
-        /// <param name="positionId"></param>
         /// <returns> Trả về kết quả của filter</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
-        /// ModifiedBy: NTUDNG (27/08/2021)
-        FilterResponse GetByFilter(int pageSize, int pageNumber, string filterString, Guid? departmentId, Guid? positionId);
+        /// ModifiedBy: NTUDNG (01/09/2021)
+        FilterResponse GetByFilter(int pageSize, int pageNumber, string filterString);
 
         #endregion
 

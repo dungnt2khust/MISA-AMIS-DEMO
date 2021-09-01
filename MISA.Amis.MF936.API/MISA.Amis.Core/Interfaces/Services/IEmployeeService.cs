@@ -17,11 +17,10 @@ namespace MISA.Amis.Core.Interfaces.Services
         /// <param name="pageSize"></param>
         /// <param name="pageNumber"></param>
         /// <param name="filterString"></param>
-        /// <param name="departmentId"></param>
-        /// <param name="positionId"></param>
         /// <returns> Kết quả nghiệp vụ phân trang và lọc dữ liệu nhân viên</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
-        ServiceResult GetByFilter(int pageSize, int pageNumber, string filterString, Guid? departmentId, Guid? positionId);
+        /// ModifiedBy: NTDUNG (01/09/2021)
+        ServiceResult GetByFilter(int pageSize, int pageNumber, string filterString);
         #endregion
 
         #region Lấy mã nhân viên mới

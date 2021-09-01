@@ -33,19 +33,20 @@
 		data() {
 			return {
 				isError: false,
-				errorMsg: "không được để trống",
+				errorMsg: '',
 			};
 		},
         computed: {
             inputListeners: function() {
                 return Object.assign({}, this.$listener, {
                     input: () => {
-                        console.log('input');
+                        // Khi nhập thì bỏ hiện lỗi đi
+                        this.isError = false;
+                        this.errorMsg = '';
                     },
                     blur: (event) => {
                         // Validate dữ liệu
                         this.validateInput(event.target.value);
-
                         // Đưa dữ liệu ra phía cha
                         this.$emit('input', event.target.value);
                     }
@@ -60,22 +61,22 @@
              * ModifiedBy: NTDUNG (06/08/2021)
              */
             validateInput(value) {
-                if (value === null || value === "") {
+                if (value === null || value === '') {
                     if (this.required) {
-                        this.errorMsg = "không được để trống";
+                        this.errorMsg = 'không được để trống';
                         this.isError = true;
                     }
                 } else {
                     switch (this.field) {
-                        case "Email":
+                        case 'Email':
                             if (!this.validEmail(value)) {
-                                this.errorMsg = "sai định dạng";
+                                this.errorMsg = 'sai định dạng';
                                 this.isError = true;
                             }
                             break;
-                        case "PhoneNumber":
+                        case 'PhoneNumber':
                             if (!this.validPhone(value)) {
-                                this.errorMsg = "sai định dạng";
+                                this.errorMsg = 'sai định dạng';
                                 this.isError = true;
                             }
                             break;

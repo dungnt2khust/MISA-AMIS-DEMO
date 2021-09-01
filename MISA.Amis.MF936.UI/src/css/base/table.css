@@ -111,7 +111,7 @@
         overflow-x: auto;
     }  
         /* TABLE HEAD */
-        .table__header {
+        .table thead {
             position: sticky;
             z-index: 100;
             /* top: 72px; */
@@ -120,8 +120,8 @@
             font-size: 14px;
             text-transform: capitalize;
         }
-            /* THEAD TABLE DATA */
-            .table__header .table__data {
+            /* TH*/
+            .table th {
                 padding: 0 10px;
                 white-space: nowrap;
                 height: 34px;
@@ -130,22 +130,18 @@
                 border-bottom: 1px solid var(--border-color);
             } 
         /* TABLE BODY */
-        .table__body {
+        .table tbody {
 
         }
         /* TABLE ROW */
-            .table__row {
+            .table tr {
 
             } 
-            .table__row:hover .table__data{
+            .table tr:hover td{
                 background-color: var(--table-background-hover-color);
             }
-                /* TABLE CHECKBOX */
-                .table__checkbox {
-
-                }  
                 /* TBODY TABLE DATA */
-                .table__body .table__data {
+                .table tbody td {
                     height: 47px;
                     padding: 5px 10px;
                     font-family: MISANotoSan-Regular;
@@ -155,6 +151,8 @@
                     white-space: nowrap;
                     border-right: 1px dotted var(--border-color);
                     border-bottom: 1px dotted var(--border-color);
+                    position: relative;
+                    overflow: hidden;
                 }  
                 /* TABLE FUNCTION */
                 .table__function {
@@ -174,35 +172,38 @@
 /* DÁN CÁC CỘT CỦA TABLE LẠI */
 
 /* CỘT ĐẦU TIÊN */
-.table__header .table__data:nth-child(1), 
-.table__body .table__data:nth-child(1) {
+.table th:nth-child(1), 
+.table td:nth-child(1) {
     position: sticky;
+    z-index: 20;
     left: 0;
     max-width: 40px;
 }
 
 /* CỘT THỨ 2 */
-.table__header .table__data:nth-child(2),
-.table__body .table__data:nth-child(2) {
+.table th:nth-child(2),
+.table td:nth-child(2) {
     position: sticky;
+    z-index: 50;
     left: 40px;
     min-width: 146px;
 }
 
 /* CỘT THỨ 3 */
-.table__header .table__data:nth-child(3),
-.table__body .table__data:nth-child(3) {
+.table th:nth-child(3),
+.table td:nth-child(3) {
+    z-index: 20;
     position: sticky;
     left: 186px;
     min-width: 250px;
 }
 
 /* CỘT CUỐI */
-.table__header .table__data:last-child,
-.table__body .table__data:last-child {
+.table th:last-child,
+.table td:last-child {
     border-right: none;
     position: sticky;
-    z-index: 1;
+    z-index: 20;
     right: 0;
     border-left: 1px dotted var(--border-color);
     min-width: 120px;
@@ -211,24 +212,65 @@
 }
 
 /* ĐÈ LÊN PHẦN THỪA CỦA TABLE ĐỂ CHE ĐI KHI SCROLL*/
-.table__row .table__data:first-child::before {
+.table th:first-child::before {
     display: block;
-    content: "";
-    width: 10px; 
-    height: calc(100% + 1px);
-    background-color: var(--table-background-color);
     position: absolute;
+    content: "";
+    min-width: 10px; 
+    height: 800px;
+    background-color: var(--table-background-color);
     top: 0;
     left: -10px;
-    z-index: 3;
 }
-.table__row .table__data:last-child:after {
+.table th:last-child::before {
     display: block;
-    content: "";
-    width: 30px; 
-    height: calc(100% + 1px);
-    background-color: var(--table-background-color);
     position: absolute;
+    content: "";
+    min-width: 30px; 
+    height: 800px;
+    background-color: var(--table-background-color);
     top: 0;
     right: -30px;
+}
+
+/* Hiển thị phần đè lên dữ liệu khi download */
+/* Phần che dữ liệu */
+td.table--loading::before {   
+    content: "";
+    background-color: #F1F1F1;
+    border-radius: 6px;
+    width: calc(100% - 20px);
+    height: calc(100% - 28px);
+    position: absolute;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+/* Phần hiệu ứng lướt */
+td.table--loading::after {   
+    content: "";
+    border-radius: 8px;
+    background: transparent;
+    background: linear-gradient( to right, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0.4) 45%, rgba(255, 255, 255, 0.4) 55%, rgba(255, 255, 255, 0.0) 100% );
+    width: 100%;
+    height: calc(100% - 28px);
+    position: absolute;
+    z-index: 15;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: 1s loadingEffect infinite;
+}
+/* Ẩn chức năng sửa đi */
+.table--loading.table__function {
+    opacity: 0.5
+}
+@keyframes loadingEffect {
+    from { 
+        transform: translate(-100%, -50%);
+    } 
+    to {
+        transform: translate(0, -50%);
+    }
 }

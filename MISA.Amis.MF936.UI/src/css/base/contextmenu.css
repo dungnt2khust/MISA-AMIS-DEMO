@@ -1,9 +1,9 @@
-.menu-popup-container {
+.context-menu-container {
     position: fixed;
     z-index: 9999;
     background-color: #000;
 }
-    .menu-popup {
+    .context-menu {
         width: 26px;
         height: 16px;
         display: flex;
@@ -13,16 +13,16 @@
         margin-left: 10px;
         transition: all 0.1 ease;
     }
-    /* .menu-popup:hover, */
-    .menu-popup--selected {
+    /* .context-menu:hover, */
+    .context-menu--selected {
         border: 1px solid #0075c0;
     }
-        .menu-popup__icon {
+        .context-menu__icon {
             background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -900px -365px;
             width: 8px;
             height: 5px;
         }
-    .menu-popup-container .selectbox__list {
+    .context-menu-container .selectbox__list {
         cursor: pointer;
         left: unset !important;
     }
