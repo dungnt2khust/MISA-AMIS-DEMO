@@ -79,6 +79,15 @@ namespace MISA.Amis.Core.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DANH SÁCH NHÂN VIÊN.
+        /// </summary>
+        public static string MISA_Employee_Export_Title {
+            get {
+                return ResourceManager.GetString("MISA_Employee_Export_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Có lỗi xảy ra. Vui lòng liên hệ MISA !.
         /// </summary>
         public static string MISA_Exception_Error_Msg {

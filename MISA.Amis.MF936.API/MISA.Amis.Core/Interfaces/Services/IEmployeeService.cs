@@ -2,6 +2,7 @@
 using MISA.Amis.Core.Responses;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,17 @@ namespace MISA.Amis.Core.Interfaces.Services
         /// <returns> Kết quả nghiệp vụ lấy mã nhân viên mới</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
         ServiceResult GetNewCode();
+        #endregion
+
+        #region Export dữ liệu nhân viên
+        /// <summary>
+        /// Export dữ liệu nhân viên ra file excel
+        /// </summary>
+        /// <returns> Memory Stream</returns>
+        /// CreatedBy: NTDUNG (01/09/2021)
+        /// ModifiedBy: NTDUNG (01/09/2021)
+        MemoryStream Export();
+
         #endregion
     }
 }

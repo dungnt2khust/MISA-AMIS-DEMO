@@ -21,7 +21,6 @@
     /* TABLE CONTROL */
     .table__control { 
         position: sticky;
-        /* top: 0; */
         left: 0;
         z-index: 11;
         display: flex;
@@ -83,8 +82,8 @@
                 width: 20px;
                 height: 21px;
             }
-        /* TABLE IMPORT */
-        .table__import {
+        /* table export */
+        .table__export {
             width: 24px;
             height: 24px;
             margin-left: 6px;
@@ -93,28 +92,26 @@
             justify-content: center;
             cursor: pointer;
         }
-            .table__import-icon {
+            .table__export-icon {
                 background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -705px -202px;
                 width: 23px;
                 height: 20px;
             }
-            .table__import:hover .table__import-icon {
+            .table__export:hover .table__export-icon {
                 background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -705px -258px;
             }
     /* TABLE */
     .table {
-        flex: 1;
         width: 100%;
         table-layout: auto;
         border-collapse: separate;
         border-spacing: 0;
-        overflow-x: auto;
+        flex: 1;
     }  
         /* TABLE HEAD */
         .table thead {
             position: sticky;
             z-index: 100;
-            /* top: 72px; */
             top: 0;
             font-family: MISANotoSan-Semibold;
             font-size: 14px;
@@ -132,6 +129,12 @@
         /* TABLE BODY */
         .table tbody {
 
+        }
+        .table tbody::after {
+            content: "";
+            display: block;
+            height: 100%;
+            background-color: #000;
         }
         /* TABLE ROW */
             .table tr {
@@ -154,6 +157,18 @@
                     position: relative;
                     overflow: hidden;
                 }  
+                /* Table Error */
+                .table__error {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: var(--table-background-color);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
                 /* TABLE FUNCTION */
                 .table__function {
                     display: flex;
@@ -217,7 +232,7 @@
     position: absolute;
     content: "";
     min-width: 10px; 
-    height: 800px;
+    height: calc(100vh - var(--pagination-height) - var(--header-height) - var(--content-header-height) - 90px);
     background-color: var(--table-background-color);
     top: 0;
     left: -10px;
@@ -227,7 +242,7 @@
     position: absolute;
     content: "";
     min-width: 30px; 
-    height: 800px;
+    height: calc(100vh - var(--pagination-height) - var(--header-height) - var(--content-header-height) - 90px);
     background-color: var(--table-background-color);
     top: 0;
     right: -30px;

@@ -34,5 +34,15 @@ namespace MISA.Amis.Core.Interfaces.Repositoties
         string GetNewCode();
 
         #endregion
+
+        #region Export dữ liệu nhân viên
+        /// <summary>
+        /// Export thông tin nhân viên ra file excel
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: NTDUNG (01/09/2021)
+        /// ModifiedBy: NTDUNG (01/09/2021)
+        IEnumerable<Employee> ExportEmployees();
+        #endregion
     }
 }

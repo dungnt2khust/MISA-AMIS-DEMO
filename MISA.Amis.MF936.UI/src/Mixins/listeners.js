@@ -38,11 +38,11 @@ export default {
 		callDialog(type, message){
 			return new Promise((resolve, reject) => {
 				// Set lại giá trị ban đầu cho dialog answer
-				this.dialogAnswer = null;
+				this.dialogAnswer = '';
 
 				// Gọi đến sự kiện show dialog
 				this.$bus.$emit("showDialog", { type: type, message: message });
-
+				
 				// Tạo sự kiện lắng nghe kết quả trả về của dialog
 				this.$bus.$on('dialogConfirm', (data) => {	
 
@@ -57,7 +57,7 @@ export default {
 				let count = 0;
 				let wait = setInterval(() =>{
 					count++;
-					if (this.dialogAnswer !== null) {
+					if (this.dialogAnswer !== '') {
 						clearInterval(wait);
 						resolve(this.dialogAnswer);
 					}

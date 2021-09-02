@@ -10,8 +10,16 @@
 				<div class="form__header-content">
 					<div class="form__title">Thông tin nhân viên</div>
 					<div class="form__checklist fx">
-						<base-checkbox :state="data['IsCustomer']" label="Là khách hàng" />
-						<base-checkbox :state="data['IsSupplier']" label="Là nhà cung cấp" />
+						<base-checkbox
+							:state="data['IsCustomer']"
+							v-model="data['IsCustomer']"
+							label="Là khách hàng"
+						/>
+						<base-checkbox
+							:state="data['IsSupplier']"
+							v-model="data['IsSupplier']"
+							label="Là nhà cung cấp"
+						/>
 					</div>
 				</div>
 				<div class="form__action">
@@ -27,6 +35,9 @@
 						:required="true"
 						:value="data['EmployeeCode']"
 						v-model="data['EmployeeCode']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-40"
 					/>
 					<base-input
@@ -34,6 +45,9 @@
 						:required="true"
 						:value="data['FullName']"
 						v-model="data['FullName']"
+						:formValidate="formValidate"
+						:formState="formState"	
+						@inputError="inputErrorHandle($event)"
 						class="w-60"
 					/>
 				</div>
@@ -41,7 +55,7 @@
 					<base-input-date
 						label="Ngày sinh"
 						:value="data['DateOfBirth']"
-						v-model="data['DateOfBirth']"
+						v-model="data['DateOfBirth']"	
 						class="w-40"
 					/>
 					<base-radio
@@ -67,6 +81,9 @@
 						label="Số CMND"
 						:value="data['IdentityNumber']"
 						v-model="data['IdentityNumber']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-60"
 					/>
 					<base-input-date
@@ -81,6 +98,9 @@
 						label="Chức danh"
 						:value="data['PossitionName']"
 						v-model="data['PossitionName']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 					/>
 				</div>
 				<div class="form__body-item">
@@ -88,6 +108,9 @@
 						label="Nơi cấp"
 						:value="data['IdentityPlace']"
 						v-model="data['IdentityPlace']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 					/>
 				</div>
 				<div class="form__body-item fx-100">
@@ -95,6 +118,9 @@
 						label=" Địa chỉ"
 						:value="data['Address']"
 						v-model="data['Address']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 					/>
 				</div>
 				<div class="form__body-item fx fx-100">
@@ -103,18 +129,29 @@
 						:value="data['PhoneNumber']"
 						v-model="data['PhoneNumber']"
 						field="PhoneNumber"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 					<base-input
 						label="ĐT cố định"
 						:value="data['LandlineNumber']"
 						v-model="data['LandlineNumber']"
+						field="PhoneNumber"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 					<base-input
 						label="Email"
 						:value="data['Email']"
+						v-model="data['Email']"
 						field="Email"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 				</div>
@@ -123,18 +160,27 @@
 						label="Tài khoản ngân hàng"
 						:value="data['BankAccount']"
 						v-model="data['BankAccount']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 					<base-input
 						label="Tên ngân hàng"
 						:value="data['BankName']"
 						v-model="data['BankName']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 					<base-input
 						label="Chi nhánh"
 						:value="data['BankBranch']"
 						v-model="data['BankBranch']"
+						:formValidate="formValidate"
+						:formState="formState"
+						@inputError="inputErrorHandle($event)"
 						class="w-25"
 					/>
 				</div>
@@ -144,8 +190,10 @@
 					Huỷ
 				</div>
 				<div class="form__control">
-					<div @click="update()" class="button">Cất</div>
-					<div class="button button--green">Cất và thêm</div>
+					<div @click="store()" class="button">Cất</div>
+					<div @click="storeAndAdd()" class="button button--green">
+						Cất và thêm
+					</div>
 				</div>
 			</div>
 		</div>
@@ -154,8 +202,8 @@
 <script>
 	// LIBRARY
 	import listeners from "../../../Mixins/listeners.js";
-    import employeeAPI from "../../../js/components/employeeAPI"
-    import baseAPI from "../../../js/base/baseAPI"
+	import employeeAPI from "../../../js/components/employeeAPI";
+	import baseAPI from "../../../js/base/baseAPI";
 
 	// COMPONENTS
 	import BaseInput from "../../Base/BaseInput.vue";
@@ -176,28 +224,34 @@
 		},
 		data() {
 			return {
+				formValidate: false,
 				formState: false,
-				data: [],
+				errMsg: '',
+				id: "",
+				mode: "",
+				data: {},
 				departmentData: [],
 				dragState: false,
 				distanceX: 0,
 				distanceY: 0,
-				departmentAPI: new baseAPI('Departments')
+				departmentAPI: new baseAPI("Departments"),
 			};
 		},
 		computed: {
-            /**
-             * Lắng nghe sự kiện trên form
-             * CreatedBy: NTDUNG (31/08/2021)
-             */
+			/**
+			 * Lắng nghe sự kiện trên form
+			 * CreatedBy: NTDUNG (31/08/2021)
+			 */
 			formListeners: function() {
 				var posXBegin, posXEnd, posYBegin, posYEnd;
 				return Object.assign({}, this.$listener, {
 					// Nhấn xuống thì đặt vị trí bắt đầu và bật mode drag
 					mousedown: (event) => {
-						this.dragState = true;
-						posXBegin = event.clientX;
-						posYBegin = event.clientY;
+						if (event.target.tagName != 'INPUT') {
+							this.dragState = true;
+							posXBegin = event.clientX;
+							posYBegin = event.clientY;
+						}
 					},
 					// Tắt mode drag khi nhấc chuột
 					mouseup: () => {
@@ -209,11 +263,11 @@
 					},
 					// Khi trong mode drag thì tìm ra offset và đặt position
 					mousemove: (event) => {
-						if (this.dragState) {	
+						if (this.dragState) {
 							// Gán vị trí mới
 							posXEnd = event.clientX;
 							posYEnd = event.clientY;
-							this.distanceY= posYEnd - posYBegin;
+							this.distanceY = posYEnd - posYBegin;
 							this.distanceX = posXEnd - posXBegin;
 						}
 					},
@@ -234,6 +288,11 @@
 			 * CreatedBy: NTDUNG (29/08/2021)
 			 */
 			this.$bus.$on("showForm", (data) => {
+				// Reset lỗi
+				this.errMsg = '';
+				// Gán id và mode cho form
+				this.id = data.id;
+				this.mode = data.mode;
 				// Lấy dữ liệU cho combobox
 				this.getComboboxData();
 
@@ -264,7 +323,8 @@
 			 * CreatedBy: NTDUNG (30/08/2021)
 			 */
 			getData(id) {
-                employeeAPI.getById(id)
+				employeeAPI
+					.getById(id)
 					.then((res) => {
 						// Gán dữ liệu vào mảng chứa
 						this.data = res.data;
@@ -278,7 +338,8 @@
 			 * CreatedBy: NTDUNG (31/08/2021)
 			 */
 			getNewCode() {
-				employeeAPI.getNewEmployeeCode()
+				employeeAPI
+					.getNewEmployeeCode()
 					.then((res) => {
 						// Gán code mới vào mảng
 						this.$set(this.data, "EmployeeCode", res.data.Data);
@@ -291,8 +352,9 @@
 			 * Lấy dữ liệu đổ vào combobox
 			 * CreatedBy: NTDUNG (31/08/2021)
 			 */
-			getComboboxData() {	
-				this.departmentAPI.getAll()
+			getComboboxData() {
+				this.departmentAPI
+					.getAll()
 					.then((res) => {
 						// Gán dữ liệu vào mảng chứa
 						if (res.status == 200) this.departmentData = res.data;
@@ -308,11 +370,11 @@
 			hideForm() {
 				// Gọi đến dialog
 				this.callDialog(
-					"warn",
+					"warnCancel",
 					"Dữ liệu đã bị thay đổi. Bạn có muốn cất không?"
-				).then((answer) => {
+				).then(answer => {
 					// YES
-					if (answer) this.formState = false;
+					if (answer == 'YES') this.formState = false;
 					// NO
 					else this.formState = false;
 				});
@@ -320,10 +382,92 @@
 			/**
 			 * Cập nhật thông tin
 			 * CreatedBy: NTDUNG (31/08/2021)
+			 * ModifiedBy: NTDUNG (02/09/2021)
 			 */
-			update() {
-				console.log(this.data);
+			store() {
+				// Reset lại lỗi để validate lại
+				this.errMsg = '';
+				this.formValidate = !this.formValidate;
+
+				// Chờ validate lại
+				setTimeout(() => {
+					// Khi vẫn còn lỗi
+					if (this.checkValidForm()) {
+						// Hiển thị dialog cảnh báo trước khi cất
+						this.callDialog(
+							'warnCancel',
+							'Hãy kiểm tra lại dữ liệu trước khi Cất. Bạn có muốn cất luôn?'
+						).then(answer => {
+							// Tắt form
+							this.formState = false;
+							if (answer == 'YES') {
+								this.repository();
+							} 
+						});
+					} else {
+						if (this.errMsg)
+							this.callDialog('error', this.errMsg)
+								.then(answer => {
+									if (answer == 'NO')
+										this.errMsg = '';
+								})
+					}	
+				}, 20)	
 			},
+			/**
+			 * Hàm tương tác thêm xoá
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			repository() {
+				switch (this.mode) {
+					case "add":
+						employeeAPI
+							.post(this.data)
+							.then((res) => {
+								console.log(res);
+								this.$bus.$emit("reloadData");
+							})
+							.catch((res) => {
+								console.log(res);
+							});
+						break;
+					case "update":
+						employeeAPI.put(this.id, this.data)
+							.then((res) => {
+								console.log(res);
+								this.$bus.$emit("reloadData");
+							})
+							.catch((res) => {
+								console.log(res);
+							});
+						break;
+				}
+			},
+			/**
+			 * Hàm kiểm tra form đã đúng chưa (nếu có một input là error thì chưa hợp lệ
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			checkValidForm() {
+				var check = true;
+				var inputs = this.$el.querySelectorAll('input');
+				inputs.forEach(input => {
+					if (input.classList.contains('border-error')) {
+						check = false;
+					}
+				});
+				return check;
+			},
+			/**
+			 * Bắt sự kiện input báo lỗi (lấy lỗi đầu tiên)
+			 * @param {String} errMsg thông báo lỗi 
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			inputErrorHandle(errMsg) {
+				// nếu đã tồn tại lỗi thì không lấy lỗi sau nữa
+				if (!this.errMsg) {
+					this.errMsg = errMsg;	
+				}
+			}
 		},
 		watch: {
 			/**

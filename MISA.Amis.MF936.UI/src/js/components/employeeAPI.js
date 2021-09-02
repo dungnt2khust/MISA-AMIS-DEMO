@@ -16,7 +16,7 @@ class EmployeeAPI extends BaseAPI{
      */
     getEmployeeFilter(pageSize, pageNum, filterString = ""){
         let api = this.baseApiUrl + this.controller;
-        api += `/filter?pageSize=${pageSize}&pageNum=${pageNum}&filterString=${filterString}`;
+        api += `/filter?pageSize=${pageSize}&pageNumber=${pageNum}&filterString=${filterString}`;
         return axios.get(api);
     }
 
@@ -28,6 +28,16 @@ class EmployeeAPI extends BaseAPI{
     getNewEmployeeCode(){
         let api = this.baseApiUrl + this.controller + "/NewEmployeeCode";
         return axios.get(api);
+    }
+
+    /**
+     * Xuất dữ liệu ra file excel
+     * @returns promise
+     * CreatedBy: NTDUNG (01/09/2021)
+     */
+    export() {
+        let api = this.baseApiUrl + this.controller + "/export";
+        return axios.get(api, {responseType: "blob"});
     }
 }
 export default new EmployeeAPI();

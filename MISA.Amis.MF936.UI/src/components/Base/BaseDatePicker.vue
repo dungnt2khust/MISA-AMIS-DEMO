@@ -56,6 +56,10 @@
 				type: Boolean,
 				default: false,
 			},
+			value: {
+				type: String,
+				default: null
+			}
 		},
 		data() {
 			return {
@@ -63,7 +67,6 @@
 				curr: {
 					year: new Date().getFullYear(),
 					month: new Date().getMonth() + 1,
-					date: new Date().getDate(),
 				},
 				selected: {
 					year: new Date().getFullYear(),
@@ -147,7 +150,6 @@
 			 */
 			todayOnClick() {
 				var currDate = new Date();
-				this.curr.date = currDate.getDate();
 				this.curr.month = currDate.getMonth() + 1;
 				this.curr.year = currDate.getFullYear();
 
@@ -157,28 +159,47 @@
 			},
 			/**
 			 * Sự kiện nhấn vào một ngày
-			 * @param {number} date
+			 * @param {number} pickedDate
 			 * CreatedBy: NTDUNG (30/08/2021)
+			 * ModifiedBy: NTDUNG (01/09/2021)
 			 */
-			dateOnClick(date) {
-				this.$set(this.selected, 'date', date);
-				this.$set(this.selected, 'month', this.curr.month);
-				this.$set(this.selected, 'year', this.curr.year);
+			dateOnClick(pickedDate) {
+				var date = pickedDate;
+				date = date < 10 ? '0' + date : date;
+				var month = this.curr['month'];
+				month = month < 10 ? '0' + month : month;
+				var year = this.curr['year'];
+
+				var newDate = `${year}-${month}-${date}`;
+				this.$emit('input', newDate);
+				this.$emit('hideDatepicker');
 			},
 		},
 		watch: {
 			/**
-			 * Theo dõi sự thay đổi của ngày được pick và xử lý sự kiện
-			 * @param {object} value
-			 * CreatedBy: NTDUNG (30/08/2021)
-			 */	
-			selected: {
-				handler(newVal){  
-					this.$emit('selectedADate', newVal);
-					this.$emit('hideDatepicker');
-				},
-				deep: true,
-				// immediate: true
+			 * Value truyền vào thay đổi thì cập nhật ngày hiện tại
+			 * @param {String} newValue
+			 * CreatedBy: NTDUNG (01/09/2021)
+			 */
+			value: function(newValue) {
+				if (newValue) {
+					// Chuyển về dạng ngày
+					var newDate = new Date(newValue);
+					var date = newDate.getDate();
+					var month = newDate.getMonth() + 1;
+					var year = newDate.getFullYear();
+					
+					// Gán vào ngày hiện tại
+					this.$set(this.curr, 'month', month);
+					this.$set(this.curr, 'year', year);
+
+					this.$set(this.selected, 'date', date);
+					this.$set(this.selected, 'month', month);
+					this.$set(this.selected, 'year', year);
+				}
+				else {
+					this.todayOnClick();
+				}	
 			}
 		}
 	};

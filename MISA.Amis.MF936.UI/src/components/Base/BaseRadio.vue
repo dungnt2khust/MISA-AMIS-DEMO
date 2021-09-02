@@ -43,7 +43,7 @@
 		},
 		data() {
 			return {
-				currIdx: 0,
+				currIdx: this.value !== null ? this.value : -1
 			};
 		},
 		methods: {
@@ -76,9 +76,14 @@
 			}
 		},
 		watch: {
-			// currIdx: function(options) {
-			// 	this.$emit('selectedARadio', options);
-			// }
+			/**
+			 * Khi thay đổi giá trị hiện tại thì emit ra ngoài component cha
+			 * @param {Number} option lựa chọn hiện tại
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */	
+			currIdx: function(option) {
+				this.$emit('input', option);
+			},
 			/**
 			 * Bắt sự kiện thay đổi giá trị truyền vào
 			 * @param {number} value
@@ -87,6 +92,8 @@
 			value: function(value) {
 				if (value !== null)
 					this.currIdx = value;
+				else 
+					this.currIdx = 0;
 			}
 		}
 	};

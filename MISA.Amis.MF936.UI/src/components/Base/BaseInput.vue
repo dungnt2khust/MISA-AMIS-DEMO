@@ -14,8 +14,12 @@
 	</div>
 </template>
 <script>
+    // LIBRARY
+    import listeners from '../../Mixins/listeners.js'
+
 	export default {
 		name: "BaseInput",
+        mixins: [listeners],
 		props: {
 			label: {
 				type: String,
@@ -29,14 +33,31 @@
 				type: String,
 				default: "",
 			},
+            field: {
+                type: String, 
+                default: ""
+            },
+            formValidate: {
+                type: Boolean,
+                default: false
+            },
+            formState: {
+                type: Boolean,
+                default: false
+            }
 		},
 		data() {
 			return {
 				isError: false,
 				errorMsg: '',
+                type: 0
 			};
 		},
         computed: {
+            /**
+             * Lắng nghe các sự kiện của input
+             * CreatedBy: NTDUNG (31/08/2021)
+             */
             inputListeners: function() {
                 return Object.assign({}, this.$listener, {
                     input: () => {
@@ -45,10 +66,10 @@
                         this.errorMsg = '';
                     },
                     blur: (event) => {
-                        // Validate dữ liệu
-                        this.validateInput(event.target.value);
                         // Đưa dữ liệu ra phía cha
                         this.$emit('input', event.target.value);
+                        // Validate dữ liệu
+                        this.validateInput(event.target.value, 0);
                     }
                 });
             }
@@ -56,11 +77,15 @@
         methods: {
             /**
              * validate các ô input
-             * @param {string} value
+             * @param {String} value
+             * @param {Number} type kiểu show lỗi 0: chỉ blur, 1: blur và show dialog
              * CreatedBy: NTDUNG (05/08/2021)
              * ModifiedBy: NTDUNG (06/08/2021)
              */
-            validateInput(value) {
+            validateInput(value, type) {
+                // Đặt kiểu show
+                this.type = type;
+
                 if (value === null || value === '') {
                     if (this.required) {
                         this.errorMsg = 'không được để trống';
@@ -104,9 +129,41 @@
              * ModifiedBy: NTDUNG (31/08/2021)
              */
             validPhone: function (phone) {
-                var regPhone = /^[+]?[\s./0-9]*[(]?[0-9]{1,4}[)]?[-\s./0-9]*$/g;
+                var regPhone = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
                 return regPhone.test(phone);
             },
+        },
+        watch: {
+            /**
+             * Khi giá trị form validate thay đổi thì validate input
+             * CreatedBy: NTDUNG (02/09/2021)
+             */
+            formValidate: function() {
+                // Clear lỗi cũ
+                this.isError = false;
+                setTimeout(() => { 
+                    this.validateInput(this.value);
+                }, 10); 
+            },
+            /**
+             * Lắng nghe khi có lỗi thì emit ra ngoài để form biết
+             * @param {Boolean} state
+             * CreatedBy: NTDUNG (02/09/2021)
+             */
+            isError: function(state) {
+                // Nếu có lỗi thì emit lỗi ra ngoài
+                if (state)       
+                    this.$emit('inputError', `${this.label} ${this.errorMsg}`);
+            },
+            /**
+             * Bắt sự kiện khi trạng thái form thay đổi
+             * @param {Boolean} state
+             * CreatedBy: NTDUNG (02/09/2021)
+             */
+            formState: function(state) {
+                if (state)
+                    this.isError = false;
+            }
         }
 	};
 </script>

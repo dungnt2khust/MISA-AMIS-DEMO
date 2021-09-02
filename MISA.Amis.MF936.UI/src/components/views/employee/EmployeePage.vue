@@ -31,10 +31,11 @@
 					<div class="table__reload-icon"></div>
 				</div>
 				<div
-					v-on="tooltipListeners('Thêm mới từ file Excel')"
-					class="table__import"
+					v-on="tooltipListeners('Xuất file Excel')"
+					@click="exportData()"
+					class="table__export"
 				>
-					<div class="table__import-icon"></div>
+					<div class="table__export-icon"></div>
 				</div>
 			</div>
 			<base-table
@@ -42,6 +43,8 @@
 				:tableStyle="tableEmployeeStyle"
 				:tableData="tableData"
 				:tableLoading="tableLoading"
+				:tableError="tableError"
+				:controller="controller"
 			/>
 			<base-pagination
 				:totalPage="totalPage"
@@ -77,7 +80,9 @@
 				filterString: "",
 				tableData: [],
 				tableId: "EmployeeId",
+				controller: "Employees",
 				tableLoading: false,
+				tableError: false,
 				totalPage: 0,
 				totalRecord: 0,
 				currPage: 1,
@@ -90,6 +95,11 @@
 					{ PaginationId: 100, PaginationName: "100 bản ghi trên 1 trang" },
 				],
 			};
+		},
+		created() {
+			this.$bus.$on('reloadData', () => {
+				this.getTableData(this.currOption, this.currPage, this.filterString);
+			});
 		},
 		mounted() {
 			// Lấy dữ liệu
@@ -154,6 +164,8 @@
 			getTableData(currOption, currPage, filterString) {
 				// Bật loading
 				this.turnOnLoading();
+				// Tắt báo lỗi đi
+				this.tableError = false;
 				// Lấy dữ liệu bảng từ API
 				employeeAPI
 					.getEmployeeFilter(
@@ -172,8 +184,33 @@
 						this.$refs.inputSearch.focus();
 					})
 					.catch((res) => {
+						// Tắt loading
+						this.tableLoading = false;
+						this.tableError = true;
+						this.tableData = [];
 						console.log(res);
 					});
+			},
+			/**
+			 * export dữ liệu nhân viên
+			 * CreatedBy: NTDUNG (01/09/2021)
+			 */
+			exportData() {
+				// Gọi đến API export 
+				employeeAPI.export()
+					.then((res) => {
+						// Tạo một thẻ a
+						const link = document.createElement("a");
+						// Gán link để download cho thẻ ạ
+						link.href = window.URL.createObjectURL(new Blob([res.data]));
+						// Tạo thuộc tính tên tải xuống cho link
+						link.setAttribute("download", "Danh_sach_nhan_vien.xlsx");
+						// Thêm vào trang hiện tại
+						document.body.appendChild(link);
+						// Nhấn vào link
+						link.click();
+					})
+					.catch((res) => console.log(res));
 			},
 			/**
 			 * Sự kiện nhấn vào nút Add
@@ -197,7 +234,7 @@
 					this.tableData.push(emptyRecord);
 				}
 			},
-		},
+		}
 	};
 </script>
 <style lang=""></style>

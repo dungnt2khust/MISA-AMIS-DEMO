@@ -101,5 +101,39 @@ namespace MISA.Amis.MF936.Controllers
         }
 
         #endregion
+
+        #region Export dữ liệu nhân viên
+        /// <summary>
+        /// Export dữ liệu nhân viên ra file excel
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("export")]
+        public IActionResult Export()
+        {
+            try
+            {
+                var stream = _employeeService.Export();
+                //string excelname = $"userlist-{DateTime.Now.ToString("yyyymmddhhmmssfff")}.xlsx";
+                string excelname = "Danh_sach_nhan_vien.xlsx";
+                //return file(stream, "application/octet-stre excelname);  
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelname);
+            }
+            catch (Exception ex)
+            {
+
+                var errorObj = new
+                {
+                    devMsg = ex.Message,
+                    userMsg = ResourcesVN.MISA_Exception_Error_Msg,
+                    errorCode = "misa-001",
+                    moreInfo = "https://openapi.misa.com.vn/errorcode/misa-001",
+                    traceId = "ba9587fd-1a79-4ac5-a0ca-2c9f74dfd3fb"
+                };
+
+                return StatusCode(500, errorObj);
+            }
+        }
+
+        #endregion
     }
 }

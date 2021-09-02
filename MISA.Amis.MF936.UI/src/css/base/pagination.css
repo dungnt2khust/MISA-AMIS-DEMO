@@ -15,6 +15,27 @@
     background-color: #FFF;
     align-items: center;
 }
+/* Che phần dữ liệu đi qua phân trang */
+.pagination::before {
+    display: block;
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: calc(100% + 40px);
+    left: -10px;
+    bottom: 0;
+    background-color: var(--table-background-color);
+}
+.pagination::after {
+    display: block;
+    position: absolute;
+    content: "";
+    width: 30px;
+    height: calc(100% + 40px);
+    right: -30px;
+    bottom: 0;
+    background-color: var(--table-background-color);
+}
     /* PAGINATION DESC */
     .pagination__desc {
         font-size: 13px;

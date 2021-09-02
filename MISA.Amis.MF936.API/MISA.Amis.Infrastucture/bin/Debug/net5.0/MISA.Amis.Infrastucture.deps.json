@@ -743,6 +743,9 @@
         }
       },
       "MISA.Amis.Core/1.0.0": {
+        "dependencies": {
+          "EPPlus": "5.7.4"
+        },
         "runtime": {
           "MISA.Amis.Core.dll": {}
         }

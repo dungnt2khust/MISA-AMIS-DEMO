@@ -34,12 +34,19 @@
                 justify-content: center;
                 align-items: center;
             }
-                .dialog--warn .dialog__icon::after {
+                .dialog--warnCancel .dialog__icon::after {
                     content: "";
                     display: block;
                     background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -832px -462px;
                     width: 36px;
                     height: 36px;
+                }
+                .dialog--warn .dialog__icon::after {
+                    content: "";
+                    display: block;
+                    background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -598px -463px;
+                    width: 36px;
+                    height: 37px;
                 }
                 .dialog--error .dialog__icon::after {
                     content: "";
@@ -67,11 +74,15 @@
         }
         .dialog--error .dialog__control {
             justify-content: center;
-        }
+        } 
             /* Dialog answer */
             .dialog__answer {
                 display: flex;
             }
+            .dialog--warn .dialog__answer {
+                flex: 1;
+                justify-content: space-between;
+            } 
                 .dialog__answer .button--green {
                     margin-left: 8px;
                 }

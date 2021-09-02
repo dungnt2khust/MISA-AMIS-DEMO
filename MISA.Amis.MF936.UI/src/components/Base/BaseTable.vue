@@ -1,12 +1,9 @@
-<template lang="">	
+<template lang="">
 	<table class="table">
 		<thead>
 			<tr>
 				<th>
-					<base-checkbox 
-						:state="checkAll"
-						v-model="checkAll"
-					/>
+					<base-checkbox :state="checkAll" v-model="checkAll" />
 				</th>
 				<th v-for="(item, index) in tableStyle" :key="index">
 					{{ item["name"] }}
@@ -40,7 +37,10 @@
 						class="table__function"
 						:class="{ 'table--loading': tableLoading }"
 					>
-						<div class="table__update">
+						<div
+							@click="updateOnClick(itemData[tableId])"
+							class="table__update"
+						>
 							Sửa
 						</div>
 						<div
@@ -54,21 +54,27 @@
 					</div>
 				</td>
 			</tr>
+			<div v-if="tableError" class="table__error">
+				Có lỗi xảy ra. Hãy kiểm tra kết nối mạng rồi thử lại
+			</div>
 		</tbody>
 		<base-context-menu
 			:contextMenuState="contextMenuState"
+			v-model="contextMenuState"
 			:contextMenuPosition="contextMenuPosition"
+			:controller="controller"
+			:recordInfo="recordInfo"
 		/>
-	</table>	
+	</table>
 </template>
 <script>
 	// LIBRARY
-	import Table from "../../Mixins/table.js"
-	import methods from "../../Mixins/methods"
+	import Table from "../../Mixins/table.js";
+	import methods from "../../Mixins/methods";
 
-	// COMPONENTS	
-	import BaseContextMenu from "./BaseContextMenu.vue"
-	import BaseCheckbox from "./BaseCheckbox.vue"
+	// COMPONENTS
+	import BaseContextMenu from "./BaseContextMenu.vue";
+	import BaseCheckbox from "./BaseCheckbox.vue";
 
 	export default {
 		name: "BaseTable",
@@ -94,19 +100,28 @@
 				type: Boolean,
 				default: false,
 			},
+			tableError: {
+				type: Boolean,
+				default: false,
+			},
 			tableId: {
 				type: String,
-				default: ""
-			}
+				default: "",
+			},
+			controller: {
+				type: String,
+				default: "",
+			},
 		},
 		data() {
 			return {
 				contextMenuState: false,
 				contextMenuIndex: -1,
 				contextMenuPosition: {},
-				checkAll: false
+				recordInfo: {},
+				checkAll: false,
 			};
-		},	
+		},
 		methods: {
 			/**
 			 * Tính class cho ô dữ liệu
@@ -116,13 +131,20 @@
 			tdClass(style) {
 				var classes = {};
 				// Khi table đang loading
-				if (this.tableLoading)
-					classes['table--loading'] = true;
-				
+				if (this.tableLoading) classes["table--loading"] = true;
+
 				// Đặt vị trí text
-				classes[this.getTdPos(style['pos'])] = true;
-				
+				classes[this.getTdPos(style["pos"])] = true;
+
 				return classes;
+			},
+			/**
+			 * Sự kiện nhấn vào nút sửa trên table
+			 * @param {String} id id của bản ghi
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			updateOnClick(id) {
+				this.$bus.$emit("showForm", { mode: "update", id: id });
 			},
 			/**
 			 * Xử lý sự kiện dblclick vào một bản ghi
@@ -133,22 +155,21 @@
 			 */
 			trOnDbClick(event, id) {
 				// Lấy ra element checkbox bị dblclick vào
-				var checkbox = this.findParentByClass(event.target, 'checkbox');
+				var checkbox = this.findParentByClass(event.target, "checkbox");
 				// Nếu dblclick vào td hoặc một checkbox disable thì hiển thì form
-				if (event.target.tagName == 'TD' || checkbox.classList.contains('checkbox--disable'))		
+				if (
+					event.target.tagName == "TD" ||
+					(checkbox && checkbox.classList.contains("checkbox--disable"))
+				)
 					this.$bus.$emit("showForm", { mode: "update", id: id });
 			},
 			/**
 			 * Xử lý sự kiện click vào context menu
 			 * @param {event} event
-			 * @param {number} index chỉ số của dòng dữ liệu
+			 * @param {number} index index của dòng dữ liệu
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			contextMenuOnClick(event, index) {
-				// Thêm focus border khi click vào context menu
-				var contextMenu = this.findParentByClass(event.target, 'context-menu');	
-				contextMenu.classList.toggle('context-menu--selected');
-	
 				if (this.contextMenuState) {
 					// Kiểm tra trùng với element khác không
 					if (this.contextMenuIndex != index) {
@@ -168,19 +189,19 @@
 			 * @param {event} event
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
-			contextMenuOnBlur(event) {
-				this.contextMenuState = false;
-				event.target.classList.remove("context-menu--selected");
+			contextMenuOnBlur() {
+				// this.contextMenuState = false;
+				// event.target.classList.remove("context-menu--selected");
 			},
 			/**
 			 * Hiển thị context menu
 			 * @param {event} event
-			 * @param {number} index chỉ số của dòng
+			 * @param {number} index index chỉ số của dòng
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
 			showContextMenu(event, index) {
 				// Lấy ra phần tử context menu
-				var element = this.findParentByClass(event.target, 'context-menu'); 
+				var element = this.findParentByClass(event.target, "context-menu");
 
 				// Gán toạ độ lấy được từ event
 				var elementRect = element.getBoundingClientRect();
@@ -191,14 +212,22 @@
 					left: elementRect.left,
 				};
 
-				// Hiển thị context menu
+				// Chuyển index
 				this.contextMenuIndex = index;
+				// Gán dữ liệu bản ghi đưa sang context menu
+				this.recordInfo = {
+					Id: this.tableData[index][this.tableId],
+					Code: this.tableData[index][this.tableStyle[0]["field"]],
+					Name: this.tableData[index][this.tableStyle[1]["field"]],
+				};
+				// Hiển thị context menu
 				this.contextMenuState = true;
 			},
 			/**
 			 * Ẩn context menu
 			 * CreatedBy: NTDUNG (28/08/2021)
 			 */
+
 			hideContextMenu() {
 				this.contextMenuState = false;
 			},

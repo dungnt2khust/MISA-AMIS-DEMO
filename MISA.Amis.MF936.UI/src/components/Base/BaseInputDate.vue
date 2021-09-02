@@ -11,44 +11,51 @@
 				:value="resolvedValue"
 				class="input input--date"
 			/>
-			<!-- @blur="datePickerState = false" -->
 			<span
 				tabindex="0"
 				@click="datePickerState = !datePickerState"
 				class="input__icon"
 			></span>
 			<base-date-picker
+				:value="currDate"
+				v-model="currDate"
 				:datePickerState="datePickerState"
-				@selectedADate="selectedADate($event)"
 				@hideDatepicker="datePickerState = false"
 			/>
 		</div>
 	</div>
 </template>
 <script>
+	// LIBRARY
+	import methods from "../../Mixins/methods"
 	// COMPONENTS
 	import BaseDatePicker from "./BaseDatePicker.vue";
 
 	export default {
-		name: "BaseInputDate",
+		name: 'BaseInputDate',
+		mixins: [methods],
 		components: {
 			BaseDatePicker,
 		},
 		props: {
 			label: {
 				type: String,
-				default: "",
+				default: '',
 			},
 			required: {
 				type: Boolean,
 				default: false,
 			},
+			value: {
+				type: String,
+				default: null
+			}
 		},
 		data() {
 			return {
 				datePickerState: false,
-				currValue: "",
-                defaultValue: "__/__/____"
+				currDate: null,
+                defaultValue: '__/__/____'
 			};
 		},
         computed: {
@@ -74,23 +81,37 @@
              * @return {string}
              */
             resolvedValue() {
-                // Kiểm tra value
-                if (this.currValue)
-                    return this.currValue;
-                return this.defaultValue;
+				// Nếu có ngày thì hiển thị
+                if (this.currDate)
+                    return this.formatDate(this.currDate);
+                return '';
             }
         },
 		methods: {
-			/**
-			 * Xử lý sự kiện chọn một ngày
-			 * @param {object} newVal
-			 * CreatedBy: NTDUNG (30/08/2021)
-			 */
-			selectedADate(newVal) {
-				this.currValue = `${newVal.date}/${newVal.month}/${newVal.year}`;
-			},
+			
 		},
-		watch: {},
+		watch: {
+			/**
+			 * Sự kiện khi đã pick được 1 ngày mới
+			 * @param {String} newDate
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			currDate: function(newDate) {
+				if (newDate)
+					this.$emit('input', `${newDate}T00:00:00`);
+			},
+			/**
+			 * Bắt sự kiện thay đổi value thì cập nhật ngày hiện tại
+			 * @param {String} newValue
+			 * CreatedBy: NTDUNG (02/09/2021)
+			 */
+			value: function(newValue) {
+				if (newValue)
+					this.currDate = newValue.substring(0, 10)
+				else 
+					this.currDate = null;
+			}
+		},
 	};
 </script>
 <style lang=""></style>

@@ -62,7 +62,7 @@
 			 * CreatedBy: NTDUNG (01/09/2021)
 			 */
 			checkboxState: function(newState) {
-				if (newState === true || newState === false)
+				if (this.state === true || this.state === false)
 					this.$emit("input", newState);
 				else 
 					this.$emit("input", newState ? 1 : 0);

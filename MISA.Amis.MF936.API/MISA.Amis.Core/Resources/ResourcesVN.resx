@@ -123,6 +123,9 @@
   <data name="MISA_Delete_Success_Msg" xml:space="preserve">
     <value>Xoá {0} thành công</value>
   </data>
+  <data name="MISA_Employee_Export_Title" xml:space="preserve">
+    <value>DANH SÁCH NHÂN VIÊN</value>
+  </data>
   <data name="MISA_Exception_Error_Msg" xml:space="preserve">
     <value>Có lỗi xảy ra. Vui lòng liên hệ MISA !</value>
   </data>

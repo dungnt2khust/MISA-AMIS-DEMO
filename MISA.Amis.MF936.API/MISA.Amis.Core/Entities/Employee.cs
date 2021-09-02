@@ -21,6 +21,7 @@ namespace MISA.Amis.Core.Entities
         [MISARequired] 
         [MISAUnique]
         [MISADisplayName("Mã nhân viên")]
+        [MISAExport("Mã nhân viên")]
         public string EmployeeCode { get; set; }
 
         /// <summary>
@@ -39,6 +40,8 @@ namespace MISA.Amis.Core.Entities
         /// <summary>
         /// Tên đầy đủ
         /// </summary>
+        [MISAUnique]
+        [MISAExport("Họ và tên")]
         public string FullName { get; set; }
 
 
@@ -50,32 +53,40 @@ namespace MISA.Amis.Core.Entities
         /// <summary>
         /// Ngày sinh
         /// </summary>
+        [MISAExport("Ngày sinh")]
         public DateTime? DateOfBirth { get; set; }
 
         /// <summary>
         /// Số điện thoại
-        /// </summary>
+        /// </summary> 
+        [MISAUnique]
+        [MISAExport("Số điện thoại")]
         public string PhoneNumber { get; set; }
         
         /// <summary>
         /// Số điện thoại cố định
-        /// </summary>
+        /// </summary> 
+        [MISAUnique]
+        [MISAExport("Số cố định")]
         public string LandlineNumber { get; set; }
 
         /// <summary>
         /// Email
-        /// </summary>
+        /// </summary> 
+        [MISAExport("Email")]
         public string Email { get; set; }
 
 
         /// <summary>
         /// Địa chỉ
-        /// </summary>
+        /// </summary> 
+        [MISAExport("Địa chỉ")]
         public string Address { get; set; }
 
         /// <summary>
         /// Số cmnd/căn cước
         /// </summary>
+        [MISAExport("Số CMND")]
         public string IdentityNumber { get; set; }
 
         /// <summary>
@@ -91,16 +102,19 @@ namespace MISA.Amis.Core.Entities
         /// <summary>
         /// Tài khoản ngân hàng
         /// </summary>
+        [MISAExport("Tài khoản ngân hàng")]
         public string BankAccount { get; set; }
 
         /// <summary>
         /// Tên ngân hàng
         /// </summary>
+        [MISAExport("Tên ngân hàng")]
         public string BankName { get; set; }
 
         /// <summary>
         /// Chi nhánh ngân hàng
         /// </summary>
+        [MISAExport("Chi nhánh")]
         public string BankBranch { get; set; }
 
         /// <summary>
@@ -112,22 +126,24 @@ namespace MISA.Amis.Core.Entities
         /// Tên phòng ban
         /// </summary>
         [MISANotMap]
+        [MISAExport("Đơn vị")]
         public string DepartmentName { get; set; }
  
         /// <summary>
         /// Tên vị trí / chức vụ
         /// </summary>
-        [MISANotMap]
+        [MISAExport("Chức danh")]
         public string PositionName { get; set; }
         
         /// <summary>
         /// Là khách hàng
-        /// </summary>
+        /// </summary> 
+        [MISAExport("Là khách hàng")]
         public int? IsCustomer { get; set; }
         /// <summary>
         /// Là nhà cung cấp
         /// </summary>
-
+        [MISAExport("Là nhà cung cấp")]
         public int? IsSupplier { get; set; }
         #endregion
     }

@@ -9,6 +9,7 @@ export default {
                 {name: 'Giới tính', field: 'Gender',type: 0, pos: 0},
                 {name: 'Ngày sinh', field: 'DateOfBirth',type: 0, pos: 1},
                 {name: 'Số CMND/ CCCD', field: 'IdentityNumber',type: 0, pos: 0},
+                {name: 'Email', field: 'Email',type: 0, pos: 0},
                 {name: 'Chức danh', field: 'PositionName',type: 0, pos: 0},
                 {name: 'Tên đơn vị', field: 'DepartmentName',type: 0, pos: 0},
                 {name: 'Là khách hàng', field: 'IsCustomer', type: 1, pos: 0}, 

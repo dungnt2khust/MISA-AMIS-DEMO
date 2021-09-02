@@ -17,10 +17,10 @@
 }
 
 #menu {
+    flex-shrink: 0;
     width: var(--menu-width);
     background-color: var(--menu-background-color);
     height: 100%;
-    /* transition: all 1s ease; */
     overflow: hidden;
     white-space: nowrap;
 }

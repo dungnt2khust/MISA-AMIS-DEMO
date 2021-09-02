@@ -20,6 +20,22 @@ export default {
             }
             // Trả về kết quả
             return parentE;
-        }
+        },
+        /**
+         * Format dữ liệu ngày tháng
+         * @param {string} value
+         * CreatedBy: NTDUNG (01/09/2021)
+         */
+        formatDate(value) {
+            if (value) {
+                var currDate = new Date(value);
+                var date = currDate.getDate();
+                var month = currDate.getMonth() + 1;
+                var year = currDate.getFullYear();
+
+                return `${date}/${month}/${year}`;
+            }
+            return null;
+        },
     }
 }

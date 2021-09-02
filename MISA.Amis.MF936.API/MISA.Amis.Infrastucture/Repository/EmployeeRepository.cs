@@ -2,6 +2,7 @@
 using MISA.Amis.Core.Entities;
 using MISA.Amis.Core.Interfaces.Repositoties;
 using MISA.Amis.Core.Responses;
+using MySqlConnector;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -36,7 +37,7 @@ namespace MISA.Amis.Infrastucture.Repository
             var parameters = new DynamicParameters();
 
             parameters.Add("@m_PageSize", pageSize);
-            parameters.Add("@m_PageStart", pageNumber * pageSize);
+            parameters.Add("@m_PageStart", (pageNumber - 1) * pageSize);
             parameters.Add("@m_FilterString", filterString);
 
 
@@ -71,25 +72,30 @@ namespace MISA.Amis.Infrastucture.Repository
         /// </summary>
         /// <returns> Mã nhân viên mới</returns>
         /// CreatedBy: NTDUNG (27/08/2021)
+        /// ModifiedBy: NTDUNG (01/09/2021)
         public string GetNewCode()
         {
-            var sqlQuery = "SELECT e.EmployeeCode FROM Employee e ORDER BY e.EmployeeCode DESC LIMIT 1";
-            var employeeCode = _dbConnection.QueryFirstOrDefault<string>(sqlQuery);
-            int employeeNumber;
-            string newEmployeeCode;
+            string storeName = "Proc_GetNewEmployeeCode";
+            var newCode = _dbConnection.QueryFirstOrDefault<string>(storeName, commandType: CommandType.StoredProcedure);
 
-            if (employeeCode != null)
-            {
-                employeeNumber = int.Parse(employeeCode.Split("NV")[1]);
-                employeeNumber++;
-                newEmployeeCode = $"NV{employeeNumber.ToString().PadLeft(5, '0')}";
-            }
-            else
-            {
-                newEmployeeCode = "NV00001";
-            }
+            return newCode;
+        }
 
-            return newEmployeeCode;
+        #endregion
+
+
+        #region Export dữ liệu nhân viên
+        /// <summary>
+        /// Export thông tin nhân viên ra file excel
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: NTDUNG (01/09/2021)
+        /// ModifiedBy: NTDUNG (01/09/2021)
+        public IEnumerable<Employee> ExportEmployees()
+        {
+            var proceduce = "Proc_ExportEmployees";
+            var employees = _dbConnection.Query<Employee>(proceduce, commandType: CommandType.StoredProcedure);
+            return employees;
         }
 
         #endregion
