@@ -37,7 +37,7 @@
                 type: String, 
                 default: ""
             },
-            formValidate: {
+            validateState: {
                 type: Boolean,
                 default: false
             },
@@ -138,7 +138,7 @@
              * Khi giá trị form validate thay đổi thì validate input
              * CreatedBy: NTDUNG (02/09/2021)
              */
-            formValidate: function() {
+            validateState: function() {
                 // Clear lỗi cũ
                 this.isError = false;
                 setTimeout(() => { 

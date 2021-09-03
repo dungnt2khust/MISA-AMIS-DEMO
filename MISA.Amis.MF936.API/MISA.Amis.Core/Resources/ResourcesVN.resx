@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ConnectionString" xml:space="preserve">
-    <value>Host = localhost;Database = misa.amis.ntdung.mf936; User Id = root; Password = 311200;</value>
-  </data>
   <data name="MISA_Delete_Success_Msg" xml:space="preserve">
     <value>Xoá {0} thành công</value>
   </data>

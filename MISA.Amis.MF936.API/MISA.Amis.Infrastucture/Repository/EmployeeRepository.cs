@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MISA.Amis.Core.Entities;
 using MISA.Amis.Core.Interfaces.Repositoties;
 using MISA.Amis.Core.Responses;
@@ -14,6 +15,12 @@ namespace MISA.Amis.Infrastucture.Repository
 {
     public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     {
+        #region Contructor 
+        public EmployeeRepository(IConfiguration _configuration) : base(_configuration)
+        {
+        }
+        #endregion
+
         #region Phân trang và lọc dữ liệu nhân viên
 
         /// <summary>
@@ -82,7 +89,6 @@ namespace MISA.Amis.Infrastucture.Repository
         }
 
         #endregion
-
 
         #region Export dữ liệu nhân viên
         /// <summary>

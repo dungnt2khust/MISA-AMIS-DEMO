@@ -178,7 +178,7 @@ namespace MISA.Amis.Core.Services
                     var propDisplayName = prop.GetCustomAttributes(typeof(MISADisplayName), true);
                     var propMISAUnique = prop.GetCustomAttributes(typeof(MISAUnique), true);
                     var fieldName = (propDisplayName[0] as MISADisplayName).FieldName;
-
+                    var fieldValue = prop.GetValue(entity);
                     if (propValue == null || propValue.ToString() == "")
                     {
                         _serviceResult.IsValid = false;
@@ -193,7 +193,7 @@ namespace MISA.Amis.Core.Services
                             if (!checkDuplicate)
                             {
                                 _serviceResult.IsValid = false;
-                                _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Duplicate_Msg, fieldName);
+                                _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Duplicate_Msg, $"{fieldName} <b>{fieldValue}</b>");
                                 return false;
                             }
                         }
@@ -247,6 +247,8 @@ namespace MISA.Amis.Core.Services
             }
             return listError;
         }
-        #endregion 
+        #endregion
+
+       
     }
 }

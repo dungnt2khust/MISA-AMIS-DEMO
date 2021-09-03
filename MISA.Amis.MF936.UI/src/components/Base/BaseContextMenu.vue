@@ -98,7 +98,7 @@
 							"warn",
 							`Bạn có chắc muốn xoá <b>${this.recordInfo["Name"]} - ${this.recordInfo["Code"]}</b> không ?`
 						).then((answer) => {
-							if (answer)
+							if (answer == 'YES')
 								entityAPI
 									.delete(this.recordInfo["Id"])
 									.then((res) => {

@@ -18,7 +18,10 @@
 				:key="indexData"
 			>
 				<td>
-					<base-checkbox />
+					<base-checkbox 
+						:state="markRows[indexData]"
+						v-model="markRows[indexData]"
+					/>
 				</td>
 				<td
 					v-for="(itemStyle, indexStyle) in tableStyle"
@@ -53,10 +56,7 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<div v-if="tableError" class="table__error">
-				Có lỗi xảy ra. Hãy kiểm tra kết nối mạng rồi thử lại
-			</div>
+			</tr>	
 		</tbody>
 		<base-context-menu
 			:contextMenuState="contextMenuState"
@@ -100,10 +100,6 @@
 				type: Boolean,
 				default: false,
 			},
-			tableError: {
-				type: Boolean,
-				default: false,
-			},
 			tableId: {
 				type: String,
 				default: "",
@@ -112,9 +108,14 @@
 				type: String,
 				default: "",
 			},
+			deleteState: {
+				type: Boolean,
+				default: false
+			}
 		},
 		data() {
 			return {
+				markRows: [],
 				contextMenuState: false,
 				contextMenuIndex: -1,
 				contextMenuPosition: {},
@@ -161,7 +162,7 @@
 					event.target.tagName == "TD" ||
 					(checkbox && checkbox.classList.contains("checkbox--disable"))
 				)
-					this.$bus.$emit("showForm", { mode: "update", id: id });
+					this.$bus.$emit("showForm", { mode: "UPDATE", id: id });
 			},
 			/**
 			 * Xử lý sự kiện click vào context menu
@@ -232,6 +233,38 @@
 				this.contextMenuState = false;
 			},
 		},
+		watch: {	
+			/**
+			 * Khi trạng thái checkbox thay đổi thì emit ra ngoài
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			markRows: {	
+				handler(newValue) {
+					this.$emit('input', newValue);
+				},
+				deep: true
+			},
+			/**
+			 * Khi check và bỏ check tất cả
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			checkAll: function(state) {	
+				this.$nextTick(() => {
+					for (var i = 0; i < this.tableData.length; i++) {
+						this.$set(this.markRows, i, state);
+					}
+				});
+			},
+			/**
+			 * Khi table load lại thì bỏ hết check
+			 * @param {Boolean} state
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			tableLoading: function(state) {
+				if (state)
+					this.checkAll = false;
+			}
+		}
 	};
 </script>
 <style lang=""></style>

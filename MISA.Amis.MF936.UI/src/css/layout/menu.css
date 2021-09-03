@@ -71,7 +71,9 @@
     /* MENU LOGO */
     .menu__logo {
         height: var(--menu-logo-height);
-        weight: var(--menu-logo-width);
+        width: var(--menu-logo-width);
+        background: url('../../assets/img/Logo_Module_TiengViet_White.66947422.svg') no-repeat center;
+        background-size: contain;
     }
 
 /* MENU LIST */

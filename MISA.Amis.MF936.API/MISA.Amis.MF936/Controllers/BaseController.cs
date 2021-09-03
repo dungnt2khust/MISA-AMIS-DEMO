@@ -156,7 +156,7 @@ namespace MISA.Amis.MF936.Controllers
 
                 if (_serviceResult.IsValid == false)
                 {
-                    return StatusCode(400, _serviceResult);
+                    return BadRequest(_serviceResult);
                 }
 
                 _serviceResult.Msg = string.Format(ResourcesVN.MISA_Update_Success_Msg, _entityName);

@@ -61,15 +61,6 @@ namespace MISA.Amis.Core.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Host = localhost;Database = misa.amis.ntdung.mf936; User Id = root; Password = 311200;.
-        /// </summary>
-        public static string ConnectionString {
-            get {
-                return ResourceManager.GetString("ConnectionString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Xoá {0} thành công.
         /// </summary>
         public static string MISA_Delete_Success_Msg {

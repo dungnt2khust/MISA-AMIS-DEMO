@@ -1,9 +1,11 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using MISA.Amis.Core.Attributes;
 using MISA.Amis.Core.Resources;
 using MySqlConnector;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -21,14 +23,18 @@ namespace MISA.Amis.Infrastucture.Repository
 
         protected readonly string _entityName;
 
+        protected IConfiguration configuration;
+
         #endregion
 
         #region Constructors
 
-        public BaseRepository()
+        public BaseRepository(IConfiguration _configuration)
         {
+            configuration = _configuration;
+
             // Lấy thông tin truy cập db
-            _connectionString = ResourcesVN.ConnectionString;
+            _connectionString = this.configuration.GetConnectionString("MISA.Amis");
 
             // Khởi tạo đối tượng kết nối db
             _dbConnection = new MySqlConnection(_connectionString);
@@ -182,10 +188,13 @@ namespace MISA.Amis.Infrastucture.Repository
             for (int i = 0; i < entityIds.Count; i++)
             {
                 var id = entityIds[i];
-                paramName.Add($"@id{i}");
-                parameters.Add($"@id{i}", id.ToString());
+                // Đặt tên cho param
+                paramName.Add($"@m_Id{i}");
+                // Đặt giá trị cho param bằng id 
+                parameters.Add($"@m_Id{i}", id.ToString());
             }
-
+               
+            // Join mảng để tạo ra câu truy vấn xoá nhiều
             var sql = $"Delete from {_entityName} where {_entityName}Id In ({String.Join(", ", paramName.ToArray())})";
 
             return _dbConnection.Execute(sql, param: parameters);

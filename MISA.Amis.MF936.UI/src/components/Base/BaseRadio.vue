@@ -1,5 +1,6 @@
 <template lang="">
 	<div class="radio">
+		<div style="display: none"> {{ defaultIndex()}} </div>
 		<div v-if="label != ''" class="label">{{ label }}</div>
 		<div class="radio__list fx">
 			<div
@@ -73,6 +74,17 @@
 						this.currIdx = index;
 						break;
 				}
+			},
+			/**
+			 * Đặt giá trị mặc định cho radio khi không có giá trị truyền vào
+			 * @return {Number} Giá trị mặc định
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			defaultIndex() {
+				if (this.value == null) {
+					this.$emit('input', 0);
+				}
+				return 0;
 			}
 		},
 		watch: {

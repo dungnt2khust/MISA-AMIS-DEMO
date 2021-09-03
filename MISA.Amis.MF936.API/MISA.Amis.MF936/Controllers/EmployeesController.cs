@@ -121,7 +121,7 @@ namespace MISA.Amis.MF936.Controllers
             catch (Exception ex)
             {
 
-                var errorObj = new
+                var response = new
                 {
                     devMsg = ex.Message,
                     userMsg = ResourcesVN.MISA_Exception_Error_Msg,
@@ -130,7 +130,7 @@ namespace MISA.Amis.MF936.Controllers
                     traceId = "ba9587fd-1a79-4ac5-a0ca-2c9f74dfd3fb"
                 };
 
-                return StatusCode(500, errorObj);
+                return StatusCode(500, response);
             }
         }
 

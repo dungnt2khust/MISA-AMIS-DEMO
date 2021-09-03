@@ -1,4 +1,5 @@
-﻿using MISA.Amis.Core.Entities;
+﻿using Microsoft.Extensions.Configuration;
+using MISA.Amis.Core.Entities;
 using MISA.Amis.Core.Interfaces.Repositoties;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,10 @@ namespace MISA.Amis.Infrastucture.Repository
 {
     public class PossitionRepository : BaseRepository<Possition>, IPossitionRepository
     {
+        #region Contructor 
+        public PossitionRepository(IConfiguration _configuration) : base(_configuration)
+        {
+        }
+        #endregion
     }
 }

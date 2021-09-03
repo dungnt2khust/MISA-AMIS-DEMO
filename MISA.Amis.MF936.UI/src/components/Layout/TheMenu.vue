@@ -1,23 +1,22 @@
 <template lang="">
 	<div id="menu" :class="{ 'menu--small': !menuState }">
-		<div class="menu__home" :class="{'fx-center': !menuState}">
+		<div class="menu__home" :class="{ 'fx-center': !menuState }">
 			<div v-show="menuState" class="menu__grid"></div>
-			<div v-show="!menuState" @click="$emit('toggleMenu')" class="menu__toggle">
+			<div
+				v-show="!menuState"
+				@click="$emit('toggleMenu')"
+				class="menu__toggle"
+			>
 				<div class="menu__toggle-icon"></div>
 			</div>
-			<img
-				v-show="menuState"
-				class="menu__logo"
-				src="https://actappg1.misacdn.net/img/Logo_Module_TiengViet_White.66947422.svg"
-				alter="Logo"
-			/>
+			<div class="menu__logo" v-show="menuState"></div>
 		</div>
 		<div class="menu__list">
 			<a
 				v-for="(item, index) in menuList"
 				href="#"
 				class="menu__item"
-				:class="{'fx-center': !menuState}"
+				:class="{ 'fx-center': !menuState }"
 				v-on="tooltipListeners(item['name'])"
 				:key="index"
 			>
@@ -38,7 +37,7 @@
 </template>
 <script>
 	// LIBRARY
-	import listeners from '../../Mixins/listeners.js'
+	import listeners from "../../Mixins/listeners.js";
 
 	export default {
 		name: "TheMenu",
@@ -144,7 +143,7 @@
 					},
 				],
 			};
-		}
-	}
+		},
+	};
 </script>
 <style></style>

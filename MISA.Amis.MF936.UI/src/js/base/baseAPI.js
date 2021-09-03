@@ -45,8 +45,9 @@ export default class BaseAPI {
      * CreatedBy: NTDUNG (01/09/2021)
      */
     async put(id, body) {
+        console.log(body);
         let api = this.baseApiUrl + this.controller + "/" + id;
-        return await axios.put(api, body);
+        return await axios.put(api, body); 
     }
 
     /**
@@ -55,16 +56,15 @@ export default class BaseAPI {
      * @returns promise get từ call axios api
      * CreatedBy: NTDUNG (01/09/2021)
      */
-    async deleteMultiple(idList) {
-       
-        let api = this.baseApiUrl + this.controller + "?entityIds=" + idList;
-        return await axios.delete(api);
+    async deleteMany(body) { 
+        let api = this.baseApiUrl + this.controller;
+        return await axios.delete(api, {data: body});
     }
     /**
      * Xóa theo id
      * @param {string} id  id của đối tượng
      * @returns promise
-     * CreatedBy: nvdien(30/8/2021)
+     * CreatedBy: NTDUNG (01/09/2021)
      */
     delete(id){
         let api = this.baseApiUrl + this.controller + "/" + id;
