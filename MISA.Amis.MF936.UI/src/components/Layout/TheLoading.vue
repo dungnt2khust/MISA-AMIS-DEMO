@@ -6,11 +6,26 @@
 <script>
 export default {
     name: 'TheLoading',
-    props: {
-        loadingState: {
-            type: Boolean,
-            default: false
+    data()  {
+        return {
+            loadingState: false
         }
+    },
+    created() {
+        /**
+         * Show loading 
+         * CreatedBy: NTDUNG (03/09/2021)
+         */
+        this.$bus.$on('showLoading', () => {
+            this.loadingState = true;
+        });
+        /**
+         * Hide loading
+         * CreatedBy: NTDUNG (03/09/2021)
+         */
+        this.$bus.$on('hideLoading', () => {
+            this.loadingState = false;
+        });
     }
 }
 </script>

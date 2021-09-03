@@ -216,6 +216,7 @@
 						this.totalRecord = res.data.TotalRecord;
 						// Tắt loading
 						this.tableLoading = false;
+						this.$bus.$emit('hideLoading');
 						// Focus ô tìm kiếm
 						this.$refs.inputSearch.focus();
 					})

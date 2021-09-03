@@ -20,6 +20,7 @@
 	// LIBRARY
 	import listeners from "../../Mixins/listeners.js";
 	import baseAPI from "../../js/base/baseAPI.js";
+import employeeAPI from '../../js/components/employeeAPI.js';
 
 	export default {
 		name: "BaseContextMenu",
@@ -87,31 +88,62 @@
 			 * CreatedBy: NTDUNG (02/09/2021)
 			 */
 			choose(index) {
+				// Bỏ s ở controller
+				var id = this.recordInfo.data[this.controller.slice(0, -1) + "Id"];
+				var code = this.recordInfo.data[this.controller.slice(0, -1) + "Code"];
 				var entityAPI = new baseAPI(this.controller);
 
 				switch (this.contextMenuData[index]) {
 					case "Nhân bản":
-						console.log("Nhân bản", this.recordInfo["Id"]);
+						this.callDialog('warn', `Bạn có chắc muốn nhân bản <b>${code}</b> không ?`)
+						.then(answer => {
+							if (answer == "YES") {
+								var dataClone = this.recordInfo.data;
+								delete dataClone[this.controller.slice(0, -1) + "Id"];
+								this.$bus.$emit("showLoading");
+								// Lấy mã mới
+								employeeAPI.getNewEmployeeCode()
+									.then((res) => {
+										this.$set(dataClone, this.controller.slice(0, -1) + "Code", res.data.Data);	
+										// Tạo mới
+										employeeAPI.post(dataClone)
+											.then(() => {
+												// Load lại dữ liệu
+												this.$bus.$emit("reloadData");
+											})
+											.catch(res => {
+												// Báo lỗi
+												this.callDialog('error', res.response.data.Msg);
+											});
+									})
+									.catch(res => {
+										// Báo lỗi
+										this.callDialog('error', res.response.data.Msg);
+									});		
+							}
+						});
 						break;
 					case "Xoá":
 						this.callDialog(
 							"warn",
-							`Bạn có chắc muốn xoá <b>${this.recordInfo["Name"]} - ${this.recordInfo["Code"]}</b> không ?`
+							`Bạn có chắc muốn xoá <b>${code}</b> không ?`
 						).then((answer) => {
-							if (answer == 'YES')
+							if (answer == "YES") {
+								this.$bus.$emit("showLoading");
 								entityAPI
-									.delete(this.recordInfo["Id"])
+									.delete(id)
 									.then((res) => {
 										console.log(res);
 										this.$bus.$emit("reloadData");
 									})
 									.catch((res) => {
-										console.log(res);
+										this.callDialog("error", res.response.data.userMsg);
 									});
+							}	
 						});
 						break;
 					case "Ngừng sử dụng":
-						console.log("Ngừng sử dụng", this.recordInfo["Id"]);
+						this.callDialog('error', 'Chức năng đang được hoàn thiện');
 						break;
 				}
 

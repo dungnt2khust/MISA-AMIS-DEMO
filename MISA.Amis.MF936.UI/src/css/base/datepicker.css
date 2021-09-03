@@ -17,7 +17,83 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative
     }   
+        /* DATEPICKER YEAR */
+        .datepicker__year {
+            position: absolute;
+            top: 10px;
+            right: 0;
+            left: 0;
+            height: 200px;
+            background-color: #08bf1e;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+            .datepicker__year-list {
+                padding: 10px 20px;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                color: #fff;
+            }
+                .datepicker__year-item {
+                    flex-basis: 30%;       
+                    /* padding: 0 8px; */
+                    margin: 0 !important;
+                    height: 20%;
+                    background-color: inherit;
+                    text-align: center;
+                }
+                .datepicker__year-item.year--selected {
+                    font-weight: bold;
+                }
+                .datepicker__year-item:hover {
+                    opacity: 0.8;
+                }
+                .datepicker__year-control {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                .datepicker__year-cancel {
+                    font-size: 13px;
+                    padding: 10px 20px;
+                    color: #fff; 
+                }
+                .datepicker__year-cancel:hover {
+                    opacity: 0.8;
+                }
+                .datepicker__year-prev,
+                .datepicker__year-next {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: #FFF;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                }
+                .datepicker__year-prev::after {
+                    display: block;
+                    content: "";
+                    background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -1850px -407px;
+                    width: 10px;
+                    height: 12px;
+                }
+                .datepicker__year-next::after {
+                    display: block;
+                    content: "";
+                    background: url('../../assets/img/Sprites.64af8f61.svg') no-repeat -1956px -408px;
+                    width: 10px;
+                    height: 12px;
+                }
         /* DATEPICKER PREV */
         .datepicker__prev {
             width: 24px;
@@ -38,6 +114,7 @@
             font-size: 13px;
             font-weight: 600;
             font-family: MISANotoSan-Bold;
+            cursor: pointer;
         } 
         /* DATEPICKER NEXT */
         .datepicker__next {

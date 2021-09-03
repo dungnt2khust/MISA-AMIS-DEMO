@@ -2,10 +2,30 @@
 	<div v-if="datePickerState" class="datepicker">
 		<div class="datepicker__head">
 			<div @click="prevOnClick()" class="datepicker__prev"></div>
-			<div class="datepicker__currmonth">
+			<div @click="yearPicker = true" class="datepicker__currmonth">
 				Tháng {{ curr.month }} {{ curr.year }}
 			</div>
 			<div @click="nextOnClick()" class="datepicker__next"></div>
+			<div v-if="yearPicker" class="datepicker__year">
+				<div class="datepicker__year-list">
+					<div
+						v-for="index in 9"
+						@click="pickYear((Math.floor(currYear/3) - 1) * 3 + index)"
+						class="datepicker__year-item"
+						:class="{ 'year--selected': (Math.floor(currYear/3) - 1) * 3 + index == selected.year }"
+						:key="index"
+					>
+						{{ (Math.floor(currYear/3) - 1) * 3 + index}}
+					</div>
+				</div>
+				<div class="datepicker__year-control">
+					<div @click="currYear = currYear - 6" class="datepicker__year-prev"></div>
+					<div @click="yearPicker = false" class="datepicker__year-cancel">
+						Huỷ
+					</div>
+					<div @click="currYear = currYear + 6" class="datepicker__year-next"></div>
+				</div>
+			</div>
 		</div>
 		<table class="datepicker__table">
 			<thead class="datepicker__thead">
@@ -29,7 +49,7 @@
 							'datepicker--selected':
 								getDates[(idxRow - 1) * 7 + idxData - 1] == selected.date &&
 								curr.month == selected.month &&
-								curr.year == selected.year,
+								curr.year == selected.year
 						}"
 						:style="{
 							visibility: getDates[(idxRow - 1) * 7 + idxData - 1]
@@ -49,8 +69,12 @@
 	</div>
 </template>
 <script>
+	// LIBRARY
+	import listeners from '../../Mixins/listeners.js'
+
 	export default {
 		name: "BaseDatePicker",
+		mixins: [listeners],
 		props: {
 			datePickerState: {
 				type: Boolean,
@@ -58,8 +82,8 @@
 			},
 			value: {
 				type: String,
-				default: null
-			}
+				default: null,
+			},
 		},
 		data() {
 			return {
@@ -73,6 +97,8 @@
 					month: new Date().getMonth() + 1,
 					date: new Date().getDate(),
 				},
+				yearPicker: false,
+				currYear: new Date().getFullYear(),
 			};
 		},
 		computed: {
@@ -156,6 +182,7 @@
 				this.selected.date = currDate.getDate();
 				this.selected.month = currDate.getMonth() + 1;
 				this.selected.year = currDate.getFullYear();
+				this.dateOnClick(this.selected.date);
 			},
 			/**
 			 * Sự kiện nhấn vào một ngày
@@ -165,15 +192,35 @@
 			 */
 			dateOnClick(pickedDate) {
 				var date = pickedDate;
-				date = date < 10 ? '0' + date : date;
-				var month = this.curr['month'];
-				month = month < 10 ? '0' + month : month;
-				var year = this.curr['year'];
+				date = date < 10 ? "0" + date : date;
+				var month = this.curr["month"];
+				month = month < 10 ? "0" + month : month;
+				var year = this.curr["year"];
 
 				var newDate = `${year}-${month}-${date}`;
-				this.$emit('input', newDate);
-				this.$emit('hideDatepicker');
+
+				var datePicked = new Date(newDate);
+				var currDate = new Date();
+
+				if (datePicked <= currDate) {
+					this.$emit("input", newDate);	
+				} else {
+					this.callDialog('error', 'Vượt quá ngày hiện tại, vui lòng thử lại');
+				}
+				this.$emit("hideDatepicker");
 			},
+			/**
+			 * Pick year
+			 * @param {Number} year
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			pickYear(year) {
+				this.currYear = year,
+				this.$set(this.selected, "year", year);
+				this.$set(this.curr, "year", year);
+				this.yearPicker = false;
+				this.dateOnClick(this.selected.date);
+			}
 		},
 		watch: {
 			/**
@@ -188,20 +235,19 @@
 					var date = newDate.getDate();
 					var month = newDate.getMonth() + 1;
 					var year = newDate.getFullYear();
-					
-					// Gán vào ngày hiện tại
-					this.$set(this.curr, 'month', month);
-					this.$set(this.curr, 'year', year);
 
-					this.$set(this.selected, 'date', date);
-					this.$set(this.selected, 'month', month);
-					this.$set(this.selected, 'year', year);
-				}
-				else {
+					// Gán vào ngày hiện tại
+					this.$set(this.curr, "month", month);
+					this.$set(this.curr, "year", year);
+
+					this.$set(this.selected, "date", date);
+					this.$set(this.selected, "month", month);
+					this.$set(this.selected, "year", year);
+				} else {
 					this.todayOnClick();
-				}	
-			}
-		}
+				}
+			},
+		},
 	};
 </script>
 <style lang=""></style>

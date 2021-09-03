@@ -2,7 +2,8 @@ export default {
 	data() {
 		return {
 			paginationHeight: 46,
-			dialogAnswer: null
+			dialogAnswer: null,
+			vm: this
 		};
 	},
 	methods: {

@@ -13,6 +13,7 @@
 			/>
 			<span
 				tabindex="0"
+				@blur="blurInputDate($event)"
 				@click="datePickerState = !datePickerState"
 				class="input__icon"
 			></span>
@@ -70,12 +71,8 @@
                         if (event.key )
                         console.log('inputting', event.key);
                     },
-                    blur: (event) => {
-						this.$emit('selectedADate', event.target.value);
-                        console.log('blured');
-                    }
                 })
-            },
+            },	
             /**
              * Xử lý giá trị để in lên input
              * @return {string}
@@ -88,7 +85,16 @@
             }
         },
 		methods: {
-			
+			/**
+			 * Blur ô input
+			 * @param {event} event
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			blurInputDate() {
+				setTimeout(() => {
+					this.datePickerState = false;
+				}, 100);
+			},	
 		},
 		watch: {
 			/**

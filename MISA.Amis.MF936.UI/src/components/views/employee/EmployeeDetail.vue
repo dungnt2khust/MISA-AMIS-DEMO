@@ -23,8 +23,12 @@
 					</div>
 				</div>
 				<div class="form__action">
-					<div class="form__help"></div>
-					<div @click="cancelForm()" class="form__cancel"></div>
+					<div v-on="tooltipListeners('Giúp (F1)')" @click="help()" class="form__help"></div>
+					<div
+						v-on="tooltipListeners('Đóng (F1)')"
+						@click="cancelForm()"
+						class="form__cancel"
+					></div>
 				</div>
 			</div>
 			<div class="form__body">
@@ -46,7 +50,7 @@
 						:value="data['FullName']"
 						v-model="data['FullName']"
 						:validateState="validateState"
-						:formState="formState"	
+						:formState="formState"
 						@inputError="inputErrorHandle($event)"
 						class="w-60"
 					/>
@@ -55,7 +59,7 @@
 					<base-input-date
 						label="Ngày sinh"
 						:value="data['DateOfBirth']"
-						v-model="data['DateOfBirth']"	
+						v-model="data['DateOfBirth']"
 						class="w-40"
 					/>
 					<base-radio
@@ -186,12 +190,26 @@
 				</div>
 			</div>
 			<div class="form__footer">
-				<div @click="cancelForm()" class="form__button-cancel button">
+				<div
+					v-on="tooltipListeners('Huỷ (Esc)')"
+					@click="cancelForm()"
+					class="form__button-cancel button"
+				>
 					Huỷ
 				</div>
 				<div class="form__control">
-					<div @click="store(0)" class="button">Cất</div>
-					<div @click="store(1)" class="button button--green">
+					<div
+						v-on="tooltipListeners('Cất (Ctrl + S)')"
+						@click="store(0)"
+						class="button"
+					>
+						Cất
+					</div>
+					<div
+						v-on="tooltipListeners(' Cất và thêm (Ctrl + Shift + S)')"
+						@click="store(1)"
+						class="button button--green"
+					>
 						Cất và thêm
 					</div>
 				</div>
@@ -204,7 +222,7 @@
 	import listeners from "../../../Mixins/listeners.js";
 	import employeeAPI from "../../../js/components/employeeAPI";
 	import baseAPI from "../../../js/base/baseAPI";
-	import methods from "../../../Mixins/methods.js"
+	import methods from "../../../Mixins/methods.js";
 
 	// COMPONENTS
 	import BaseInput from "../../Base/BaseInput.vue";
@@ -228,10 +246,12 @@
 				validateState: false,
 				formState: false,
 				both: false,
-				errMsg: '',
+				errMsg: "",
 				id: "",
 				mode: "",
 				data: {},
+				keyPressTimeout: null,
+				keyPresses: [],
 				dataClone: {},
 				departmentData: [],
 				dragState: false,
@@ -250,7 +270,7 @@
 				return Object.assign({}, this.$listener, {
 					// Nhấn xuống thì đặt vị trí bắt đầu và bật mode drag
 					mousedown: (event) => {
-						if (event.target.tagName != 'INPUT') {
+						if (event.target.tagName != "INPUT") {
 							this.dragState = true;
 							posXBegin = event.clientX;
 							posYBegin = event.clientY;
@@ -292,7 +312,7 @@
 			 */
 			this.$bus.$on("showForm", (data) => {
 				// Reset lỗi
-				this.errMsg = '';
+				this.errMsg = "";
 				// Gán id và mode cho form
 				this.id = data.id;
 				this.mode = data.mode;
@@ -302,6 +322,55 @@
 				this.bindFormData();
 				// Hiển thị form
 				this.showForm();
+			});
+			/**
+			 * Bắt sự kiện keydown
+			 */
+			document.addEventListener("keydown", (event) => {
+				if (this.formState) {	
+					switch (event.key) {	
+						case "Escape":
+							event.preventDefault();
+							this.cancelForm();
+							this.shortKeyDelay(0);
+							break;
+						case "F1":
+							event.preventDefault();
+							this.help();
+							this.shortKeyDelay(0);
+							break;
+						case 'Control':
+							event.preventDefault();
+							this.keyPresses['Control'] = true;
+							this.shortKeyDelay(500);
+							break;
+						case 'Shift':
+							event.preventDefault();
+							if (this.keyPresses['Control'])	{
+								this.keyPresses['Shift'] = true;
+								this.shortKeyDelay(500);
+							}
+							else 
+								this.shortKeyDelay(0);
+							break;
+						default:
+							if (event.key == 'S') {
+								if (this.keyPresses['Control']) {
+									event.preventDefault();
+									this.store(1);
+								}
+								this.shortKeyDelay(0);
+							} 
+							if (event.key == 's') {
+								if (this.keyPresses['Control']) {
+									event.preventDefault();
+									this.store(0);
+								}
+								this.shortKeyDelay(0);	
+							}
+							break;
+					}
+				}
 			});
 		},
 		methods: {
@@ -320,8 +389,7 @@
 						for (var prop in this.data) {
 							this.$set(this.data, prop, null);
 							// Xoá key là Id
-							if (prop.includes('Id'))
-								delete this.data[prop];
+							if (prop.includes("Id")) delete this.data[prop];
 						}
 						// Lấy mã mới
 						this.getNewCode();
@@ -341,12 +409,12 @@
 						// Gán dữ liệu vào mảng chứa
 						this.data = res.data;
 						// Gán dữ liệu clone
-						this.dataClone = {...this.data};
+						this.dataClone = { ...this.data };
 						// Focus first input
 						this.$refs.InputCode.$el.lastChild.focus();
 					})
 					.catch((res) => {
-						this.callDialog('error', res.Response.data);
+						this.callDialog("error", res.Response.data);
 					});
 			},
 			/**
@@ -360,18 +428,18 @@
 						// Gán code mới vào mảng
 						this.$set(this.data, "EmployeeCode", res.data.Data);
 						// Gán dữ liệu clone
-						this.dataClone = {...this.data};
+						this.dataClone = { ...this.data };
 						// Focus first input
 						this.$refs.InputCode.$el.lastChild.focus();
 					})
 					.catch((res) => {
 						// Show lỗi người dùng
-						this.callDialog('error', res.response.data.userMsg);
+						this.callDialog("error", res.response.data.userMsg);
 						// Show lỗi dev
 						console.log({
 							devMsg: res.response.data.devMsg,
 							errorCode: res.response.data.errorCode,
-							traceId: res.response.data.traceId
+							traceId: res.response.data.traceId,
 						});
 					});
 			},
@@ -388,7 +456,7 @@
 					})
 					.catch((res) => {
 						// Show lỗi người dùng
-						this.callDialog('error', res.response.data.userMsg);
+						this.callDialog("error", res.response.data.userMsg);
 						// Show lỗi dev
 						console.log({
 							devMsg: res.response.data.devMsg,
@@ -410,13 +478,13 @@
 					this.callDialog(
 						"warnCancel",
 						"Dữ liệu đã bị thay đổi. Bạn có muốn cất không?"
-					).then(answer => {
+					).then((answer) => {
 						// YES
-						if (answer == 'YES') this.store();
+						if (answer == "YES") this.store();
 						// NO
-						else if (answer == 'NO') this.hideForm();
+						else if (answer == "NO") this.hideForm();
 					});
-				// Dữ liệu không thay đổi thì tắt form luôn
+					// Dữ liệu không thay đổi thì tắt form luôn
 				} else {
 					this.hideForm();
 				}
@@ -445,26 +513,23 @@
 				// Validate form
 				this.validateForm();
 
-				// Chờ validate lại	
+				// Chờ validate lại
 				setTimeout(() => {
 					// Khi vẫn còn lỗi
 					if (this.checkValidForm()) {
-						// Khi thay đổi dữ liệu thì thực hiện 
+						// Khi thay đổi dữ liệu thì thực hiện
 						if (!this.compareObjects(this.data, this.dataClone))
 							// Repository theo modestore
-							this.repository(modeStore);	
-						else 
-							this.afterStore(modeStore);
+							this.repository(modeStore);
+						else this.afterStore(modeStore);
 					} else {
 						if (this.errMsg)
-							this.callDialog('error', this.errMsg)
-								.then(answer => {
-									if (answer == '')
-										this.errMsg = '';
-								})
-					}	
+							this.callDialog("error", this.errMsg).then((answer) => {
+								if (answer == "") this.errMsg = "";
+							});
+					}
 				}, 50);
-			},		
+			},
 			/**
 			 * Hàm tương tác thêm xoá
 			 * @param {Number} modeStore: 0 - Cất, 1 - Cất và thêm
@@ -473,6 +538,7 @@
 			repository(modeStore) {
 				switch (this.mode) {
 					case "ADD":
+						this.$bus.$emit("showLoading");
 						employeeAPI
 							.post(this.data)
 							.then(() => {
@@ -480,22 +546,24 @@
 								// Load lại dữ liệu
 								this.$bus.$emit("reloadData");
 							})
-							.catch(res => {
+							.catch((res) => {
 								// Báo lỗi
-								this.callDialog('error', res.response.data.Msg);
+								this.callDialog("error", res.response.data.Msg);
 							});
 						break;
 					case "UPDATE":
-						employeeAPI.put(this.id, this.data)
-						.then(() => {	
-							this.afterStore(modeStore);
-							// Load lại dữ liệu
-							this.$bus.$emit("reloadData");
-						})
-						.catch(res => {
-							// Báo lỗi
-							this.callDialog('error', res.response.data.Msg);
-						});
+						this.$bus.$emit("showLoading");
+						employeeAPI
+							.put(this.id, this.data)
+							.then(() => {
+								this.afterStore(modeStore);
+								// Load lại dữ liệu
+								this.$bus.$emit("reloadData");
+							})
+							.catch((res) => {
+								// Báo lỗi
+								this.callDialog("error", res.response.data.Msg);
+							});
 						break;
 				}
 			},
@@ -507,12 +575,11 @@
 			afterStore(modeStore) {
 				// Cất và thêm
 				if (modeStore) {
-					this.mode = 'ADD';
+					this.mode = "ADD";
 					this.bindFormData();
-				} 
+				}
 				// Cất
-				else 
-					this.hideForm();
+				else this.hideForm();
 			},
 			/**
 			 * Hàm kiểm tra form đã đúng chưa (nếu có một input là error thì chưa hợp lệ
@@ -520,9 +587,9 @@
 			 */
 			checkValidForm() {
 				var check = true;
-				var inputs = this.$el.querySelectorAll('input');
-				inputs.forEach(input => {
-					if (input.classList.contains('border-error')) {
+				var inputs = this.$el.querySelectorAll("input");
+				inputs.forEach((input) => {
+					if (input.classList.contains("border-error")) {
 						check = false;
 					}
 				});
@@ -530,13 +597,13 @@
 			},
 			/**
 			 * Bắt sự kiện input báo lỗi (lấy lỗi đầu tiên)
-			 * @param {String} errMsg thông báo lỗi 
+			 * @param {String} errMsg thông báo lỗi
 			 * CreatedBy: NTDUNG (02/09/2021)
 			 */
 			inputErrorHandle(errMsg) {
 				// nếu đã tồn tại lỗi thì không lấy lỗi sau nữa
 				if (!this.errMsg) {
-					this.errMsg = errMsg;	
+					this.errMsg = errMsg;
 				}
 			},
 			/**
@@ -545,17 +612,28 @@
 			 */
 			validateForm() {
 				// Clear lỗi
-				this.errMsg = ''
+				this.errMsg = "";
 				// Đổi giá trị validate để input watch
 				this.validateState = !this.validateState;
 			},
 			/**
-			 * 
+			 * Hàm trợ giúp
+			 * CreatedBy: NTDUNG (03/09/2021)
 			 */
-			focusFirstInput() {
-
+			help() {
+				this.callDialog('error', 'Chức năng đang phát triển');
+			},
+			/**
+			 * Hàm xử lý delay phím tắt
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
+			shortKeyDelay(duration) {
+				clearTimeout(this.keyPressTimeout);
+				this.keyPressTimeout = setTimeout(() => {
+					this.keyPresses = [];
+				}, duration);
 			}
-		}
+		},
 	};
 </script>
 <style lang=""></style>

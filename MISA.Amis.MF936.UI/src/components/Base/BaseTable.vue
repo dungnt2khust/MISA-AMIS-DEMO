@@ -145,7 +145,7 @@
 			 * CreatedBy: NTDUNG (02/09/2021)
 			 */
 			updateOnClick(id) {
-				this.$bus.$emit("showForm", { mode: "update", id: id });
+				this.$bus.$emit("showForm", { mode: "UPDATE", id: id });
 			},
 			/**
 			 * Xử lý sự kiện dblclick vào một bản ghi
@@ -217,9 +217,8 @@
 				this.contextMenuIndex = index;
 				// Gán dữ liệu bản ghi đưa sang context menu
 				this.recordInfo = {
-					Id: this.tableData[index][this.tableId],
-					Code: this.tableData[index][this.tableStyle[0]["field"]],
-					Name: this.tableData[index][this.tableStyle[1]["field"]],
+					data: this.tableData[index],
+					style: this.tableStyle
 				};
 				// Hiển thị context menu
 				this.contextMenuState = true;

@@ -72,6 +72,10 @@
 			};
 		},
 		computed: {
+			/**
+			 * combobox value
+			 * CreatedBy: NTDUNG (03/09/2021)
+			 */
 			comboboxValue() {
 				if (this.currIdx == -1) {
 					// Nếu không có giá trị truyền vào

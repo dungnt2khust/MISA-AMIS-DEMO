@@ -231,11 +231,11 @@
 				this.getComboboxData();
 
 				switch (data.mode) {
-					case "update":
+					case "UPDATE":
 						// Lấy dữ liệu đẩy lên form
 						this.getData(data.id);
 						break;
-					case "add":
+					case "ADD":
 						// Xoá dữ liệu cũ
 						for (var prop in this.data) {
 							this.$set(this.data, prop, null);

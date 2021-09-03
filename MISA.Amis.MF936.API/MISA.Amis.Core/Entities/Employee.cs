@@ -39,9 +39,10 @@ namespace MISA.Amis.Core.Entities
 
         /// <summary>
         /// Tên đầy đủ
-        /// </summary>
-        [MISAUnique]
+        /// </summary> 
         [MISAExport("Họ và tên")]
+        [MISADisplayName("Họ và tên")]
+        [MISARequired]
         public string FullName { get; set; }
 
 
@@ -59,15 +60,15 @@ namespace MISA.Amis.Core.Entities
         /// <summary>
         /// Số điện thoại
         /// </summary> 
-        [MISAUnique]
+        [MISADisplayName("Số điện thoại")]
         [MISAExport("Số điện thoại")]
         public string PhoneNumber { get; set; }
         
         /// <summary>
         /// Số điện thoại cố định
         /// </summary> 
-        [MISAUnique]
         [MISAExport("Số cố định")]
+        [MISADisplayName("Số cố định")]
         public string LandlineNumber { get; set; }
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace MISA.Amis.Core.Entities
         /// Số cmnd/căn cước
         /// </summary>
         [MISAExport("Số CMND")]
+        [MISADisplayName("Số CMND")]
         public string IdentityNumber { get; set; }
 
         /// <summary>
@@ -101,8 +103,9 @@ namespace MISA.Amis.Core.Entities
 
         /// <summary>
         /// Tài khoản ngân hàng
-        /// </summary>
+        /// </summary> 
         [MISAExport("Tài khoản ngân hàng")]
+        [MISADisplayName("Tài khoản ngân hàng")]
         public string BankAccount { get; set; }
 
         /// <summary>

@@ -166,39 +166,44 @@ namespace MISA.Amis.Core.Services
         public bool ValidateData(MISAEntity entity, string mode)
         {
             // Validate dữ liệu
-            var className = typeof(MISAEntity).Name;
+            //var className = typeof(MISAEntity).Name;
             var properties = entity.GetType().GetProperties();
 
             foreach (var prop in properties)
             {
+                
+                var propValue = prop.GetValue(entity);
+                var propDisplayName = prop.GetCustomAttributes(typeof(MISADisplayName), true);
+                var propMISAUnique = prop.GetCustomAttributes(typeof(MISAUnique), true);
                 var propMISArequired = prop.GetCustomAttributes(typeof(MISARequired), true);
-                if (propMISArequired.Length > 0)
+
+                // Phải có display name mới validate để lấy tên thông báo
+                if (propDisplayName.Length > 0)
                 {
-                    var propValue = prop.GetValue(entity);
-                    var propDisplayName = prop.GetCustomAttributes(typeof(MISADisplayName), true);
-                    var propMISAUnique = prop.GetCustomAttributes(typeof(MISAUnique), true);
                     var fieldName = (propDisplayName[0] as MISADisplayName).FieldName;
                     var fieldValue = prop.GetValue(entity);
-                    if (propValue == null || propValue.ToString() == "")
-                    {
-                        _serviceResult.IsValid = false;
-                        _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Emply_Msg, fieldName);
-                        return false;
-                    }
-                    else
-                    {
-                        if (propMISAUnique.Length > 0)
+                    // Validate Required
+                    if (propMISArequired.Length > 0)
+                    { 
+                        if (propValue == null || propValue.ToString() == "")
                         {
-                            var checkDuplicate = _repository.CheckDuplicate(entity, prop.Name, mode);
-                            if (!checkDuplicate)
-                            {
-                                _serviceResult.IsValid = false;
-                                _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Duplicate_Msg, $"{fieldName} <b>{fieldValue}</b>");
-                                return false;
-                            }
+                            _serviceResult.IsValid = false;
+                            _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Emply_Msg, fieldName);
+                            return false;
+                        } 
+                    }
+                    // Validate Unique
+                    if (propMISAUnique.Length > 0)
+                    {
+                        var checkDuplicate = _repository.CheckDuplicate(entity, prop.Name, mode);
+                        if (!checkDuplicate)
+                        {
+                            _serviceResult.IsValid = false;
+                            _serviceResult.Msg = string.Format(ResourcesVN.MISA_Field_Duplicate_Msg, $"{fieldName} <b>{fieldValue}</b>");
+                            return false;
                         }
                     }
-                }
+                } 
             }
             return true;
         }

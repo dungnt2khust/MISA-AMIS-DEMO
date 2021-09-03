@@ -8,7 +8,7 @@
 		<employee-detail/>
 		<base-tooltip />
 		<base-dialog />
-		<the-loading :loadingState="loadingState" />
+		<the-loading />
 	</div>
 </template>
 
@@ -38,16 +38,9 @@
 		data() {
 			return {
 				menuState: true,
-				loadingState: false,
 				reloadTable: false,
 			};
-		},
-		mounted() {
-			this.loadingState = true;
-			setTimeout(() => {
-				this.loadingState = false;
-			}, 500);
-		},
+		},	
 		methods: {
 			/**
 			 * Toggle menu
